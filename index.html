@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Kelime Uzayı 🚀</title>
     <style>
         :root {
@@ -10,58 +10,88 @@
             --correct: #10b981; --present: #f59e0b; --absent: #334155;
             --border: #475569;
         }
-        * { box-sizing: border-box; }
-        body {
-            background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0;
-            overflow: hidden; touch-action: manipulation;
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { 
+            width: 100%; height: 100%; margin: 0; padding: 0; 
+            background: var(--bg); color: var(--text); 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow: hidden; touch-action: none;
+            display: flex; flex-direction: column;
         }
-        .header { text-align: center; padding: 15px; width: 100%; border-bottom: 1px solid #1e293b; }
-        .header h1 { margin: 0; font-size: 1.8rem; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: 1px; }
+        .header { 
+            text-align: center; padding: 12px 15px; width: 100%; 
+            border-bottom: 1px solid #1e293b; flex-shrink: 0;
+        }
+        .header h1 { 
+            margin: 0; font-size: 1.5rem; 
+            background: linear-gradient(135deg, #38bdf8, #818cf8); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            font-weight: 900; letter-spacing: 1px;
+        }
+        .header .subtitle { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
         
         .grid-container {
-            display: flex; flex-direction: column; gap: 8px; padding: 20px;
-            flex-grow: 1; justify-content: center; width: 100%; max-width: 400px;
+            display: flex; flex-direction: column; gap: 6px; padding: 15px;
+            flex: 1; justify-content: center; align-items: center;
+            width: 100%; max-width: 400px; margin: 0 auto;
         }
-        .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; max-width: 330px; }
         .tile {
             border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; font-weight: 800; text-transform: uppercase; height: 65px;
-            transition: all 0.2s; border-radius: 10px; background: rgba(15, 23, 42, 0.6);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-size: 1.8rem; font-weight: 800; text-transform: uppercase; 
+            aspect-ratio: 1; max-height: 62px;
+            transition: all 0.2s; border-radius: 8px; background: rgba(15, 23, 42, 0.6);
         }
         .tile[data-state="correct"] { background: var(--correct); border-color: var(--correct); color: #000; }
         .tile[data-state="present"] { background: var(--present); border-color: var(--present); color: #000; }
         .tile[data-state="absent"] { background: var(--absent); border-color: var(--absent); opacity: 0.7; }
         .tile[data-state="active"] { border-color: #94a3b8; transform: scale(1.02); }
-        .tile.flip { transform: rotateX(90deg); }
+        .tile.flip { animation: flip 0.5s ease-in-out; }
+        @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
         
         .keyboard {
-            display: flex; flex-direction: column; gap: 10px; padding: 15px; width: 100%;
-            max-width: 600px; background: #0f172a; border-top: 1px solid #1e293b;
+            display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; 
+            width: 100%; max-width: 600px; margin: 0 auto;
+            background: #0f172a; border-top: 1px solid #1e293b; flex-shrink: 0;
         }
-        .key-row { display: flex; justify-content: center; gap: 8px; }
+        .key-row { display: flex; justify-content: center; gap: 5px; width: 100%; }
         .key {
-            background: var(--key-bg); color: white; border: none; padding: 18px 0;
-            border-radius: 8px; cursor: pointer; font-weight: 700; flex: 1; text-transform: uppercase;
-            font-size: 0.95rem; transition: all 0.1s; box-shadow: 0 2px 0 #0f172a;
+            background: var(--key-bg); color: white; border: none; 
+            padding: 14px 0; border-radius: 6px; cursor: pointer; 
+            font-weight: 700; flex: 1; max-width: 42px; text-transform: uppercase;
+            font-size: 0.9rem; transition: background 0.1s; user-select: none;
+            min-height: 50px; display: flex; align-items: center; justify-content: center;
         }
-        .key:active { transform: translateY(2px); box-shadow: none; }
-        .key.large { flex: 1.5; font-size: 0.8rem; background: #334155; }
+        .key.large { flex: 1.3; max-width: 60px; font-size: 0.7rem; background: #334155; }
+        .key.wide { flex: 1.5; max-width: 48px; }
+        .key:active { background: #475569; }
         .key[data-state="correct"] { background: var(--correct); }
         .key[data-state="present"] { background: var(--present); }
         .key[data-state="absent"] { background: var(--absent); opacity: 0.4; }
 
         .message {
-            position: absolute; top: 15%; background: #f8fafc; color: #0f172a; padding: 12px 24px;
-            border-radius: 8px; font-weight: 800; display: none; z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-transform: uppercase; letter-spacing: 1px;
+            position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+            background: #f8fafc; color: #0f172a; padding: 12px 20px;
+            border-radius: 8px; font-weight: 800; display: none; z-index: 50;
+            text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
+        }
+
+        @media (max-height: 650px) {
+            .header { padding: 8px 15px; }
+            .header h1 { font-size: 1.2rem; }
+            .grid-container { gap: 5px; padding: 10px; }
+            .row { gap: 5px; }
+            .tile { font-size: 1.5rem; max-height: 54px; }
+            .keyboard { gap: 6px; padding: 8px 4px; }
+            .key { padding: 10px 0; min-height: 44px; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>KELİME UZAYI</h1>
+        <div class="subtitle">Galaktik Kelime Avı</div>
     </div>
     <div class="message" id="message"></div>
     <div class="grid-container" id="grid"></div>
@@ -93,46 +123,88 @@
     </div>
 
     <script>
-        // Massive Turkish Dictionary
-        let words = [];
-        fetch('words.json')
-            .then(response => response.json())
-            .then(data => {
-                words = data.filter(w => w.length === 5 && w.match(/^[A-ZĞÜŞİÖÇ]+$/));
-                initGame();
-            });
+        // Clean, curated list of real 5-letter Turkish words
+        const words = [
+            "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
+            "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
+            "MERCAN","YOSUN","KÖMÜR","DEMİR","BAKIR","ALTIN","GÜMÜŞ","ELMAS","YAKUT","İNCİ",
+            "MERMER","ÇAMUR","ÇAKIL","YAPRAK","MEYVE","SEBZE","TAHIL","ZEYTİN","ÜZÜM","ELMA",
+            "ARMUT","AYVA","ERİK","KİRAZ","VİŞNE","İNCİR","LİMON","ÇİLEK","CEVİZ","FINDIK",
+            "BADEM","MISIR","BUĞDAY","ARPA","PİRİNÇ","NANE","REYHAN","KEKİK","HAVUÇ","ŞALGAM",
+            "PANCAR","PATATES","SOĞAN","SARIMSAK","LAHANA","MARUL","BİBER","DOMATES","KABAK",
+            "NOHUT","FASULYE","BEZELYE","BAKLA","MERCİMEK","BARBUNYA","BÖRÜLCE","KETEN","SUSAM",
+            "PEYNİR","KAŞAR","YOĞURT","AYRAN","KAYMAK","FIRIN","ÇATAL","KAŞIK","BIÇAK","TABAK",
+            "BARDAK","LİMONATA","GAZOZ","SALEP","BOZA","ÇORBA","EKMEK","SİMİT","POĞAÇA","BÖREK",
+            "LAHMACUN","PİDE","DÖNER","KOKOREÇ","KÖFTE","PİLAV","BULGUR","KUSKUS","MAKARNA","ERİŞTE",
+            "LAHANA","KARNIYARIK","İMAMBAYILDI","MUSAKKA","KÜNEFE","SÜTLAÇ","GÜLLAÇ","KAZANDİBİ","MUHALLEBİ","TAVUKGÖĞSÜ",
+            "BAKLAVA","KADAYIF","LOKUM","HELVA","PEKMEZ","MARMELAT","REÇEL","ŞERBET","HOŞAF","KOMPOSTO",
+            "DONDURMA","ÇİKOLATA","ŞEKER","KURABİYE","BİSKÜVİ","GOFRET","PASTA","KREM","PUDRA","ALLIK",
+            "FONDÖTEN","RUJ","PARFÜM","DEODORANT","KREM","LOSİYON","MASKARA","EYELINER","PERMA","BOYA",
+            "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
+            "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","SMOKİN","FRAK","CEKET","BLAZER",
+            "KAZAK","TIŞÖRT","GÖMLEK","KRAVAT","PAPYON","FULAR","MENDİL","KEMER","SAAT","GÖZLÜK",
+            "LENSE","AYAKKABI","BOT","ÇİZME","SANDAL","TERLİK","PALET","ŞNORKEL","KANO","KAYAK",
+            "LEVREK","ÇİPURA","LÜFER","HAMSİ","PALAMUT","SAZAN","SOMON","KÖPEK","KEDİ","TAVUK",
+            "HOROZ","ÖRDEK","KARTAL","ŞAHİN","ATMACA","SERÇE","KARGA","LEYLEK","GÜVERCİN","KUMRU",
+            "ARI","KELEBEK","SİNEK","ÇEKİRGE","AKREP","ÖRÜMCEK","KENE","PİRE","BİT","ASLAN",
+            "KAPLAN","PARS","ÇİTA","ZEBRA","ZÜRAFA","MAYMUN","GORİL","AYI","KURT","TİLKİ",
+            "ÇAKAL","KUNDUZ","SİNCAP","KİRPI","TAVŞAN","YARASA","FARE","SIÇAN","HAMSTER","PENGUEN",
+            "FLAMİNGO","PAPAGAN","KANARYA","SAHİL","PLAJ","BOĞAZ","KANAL","KÖRFEZ","OKYANUS","GÜNEY",
+            "KUZEY","DOĞU","BATI","MERKEZ","HIZLI","YAVAŞ","UZUN","KISA","GENİŞ","DAR",
+            "KALIN","İNCE","AĞIR","HAFİF","YUMUŞAK","SERT","TATLI","ACI","EKŞİ","TUZLU",
+            "ISLAK","KURU","SICAK","SOĞUK","ILIK","SERİN","PARLAK","ESKİ","YENİ","GENÇ",
+            "YAŞLI","BÜYÜK","KÜÇÜK","İÇERİ","DIŞARI","YUKARI","AŞAĞI","DOĞRU","YANLIŞ","GERÇEK",
+            "YALAN","SAHTE","ASİL","SOYLU","YÜCE","KUTSAL","ŞANSLI","KÖTÜ","İYİ","GÜZEL",
+            "ÇİRKİN","TATLI","SEVİM","NEŞELİ","HATIRA","ANILAR","GEÇMİŞ","GELECEK","GİDEN","GELEN",
+            "AKAN","DURAN","KOŞAN","UÇAN","YÜRÜYEN","OTURAN","YATAN","KALKAN","İNEN","ÇIKAN",
+            "GİREN","AÇAN","KAPAN","BAŞLAN","BİTEN","DEVAM","SÜREN","BÜYÜYEN","KÜÇÜLEN","ARTAN",
+            "AZALAN","YÜKSELEN","GİZLİ","AŞİKAR","BELLİ","AÇIK","DOSTLUK","DÜŞMANLIK","NEFRET","KALABALIK",
+            "TENHA","BOŞ","DOLU","TAMAM","EKSİK","FAZLA","ARTI","EKSİ","POZİTİF","NEGATİF",
+            "ORTA","MERKEZİ","YEREL","GLOBAL","KÜRESEL","ULUSAL","MİLLİ","YERLİ","YABANCI","İÇSEL",
+            "DIŞSAL","ÖZEL","GENEL","KAMU","HUSUSİ","ŞAHSİ","SOSYAL","KÜLTÜR","DOĞAL","YAPAY",
+            "SUNİ","SANAL","DİJİTAL","ANALOG","MODERN","KLASİK","ANTİK","YENİLİK","DEVRİM","DEĞİŞİM",
+            "DÖNÜŞÜM","EVİRİM","GELİŞİM","BÜYÜME","ÇOCUK","YETİŞKİN","İNSAN","KADIN","ERKEK","KIZ",
+            "OĞLAN","BEBEK","YAŞLI","KARTAL","DENİZCİ","ZAMAN","MEKAN","UZAY","ROKET","GEZEGEN",
+            "ASTEROİT","KUYRUK","METEOR","KOMETA","GALAKSİ","NEBULA","PULSAR","KUASAR","NOVA","SÜPERNOVA",
+            "KARADELİK","YILDIZ","GÖKCİSİM","TELESKOP","MİKROSKOP","LABORATUVAR","DENEY","KİMYA","FİZİK","BİYOLOJİ",
+            "MATEMATİK","TARİH","COĞRAFYA","FELSEFE","PSİKOLOJİ","SOSYOLOJİ","EKONOMİ","POLİTİKA","HUKUK","TIP",
+            "MÜHENDİS","MİMAR","SANATÇI","YAZAR","ŞAİR","RESSAM","MÜZİSYEN","OYUNCU","SPORCU","ÖĞRETMEN",
+            "DOKTOR","HEMŞİRE","AVUKAT","HAKİM","SAVCI","POLİS","ASKER","PİLOT","KAPTAN","DENİZCİ",
+            "MARANGOZ","DEMİRCİ","ÇİFTÇİ","BERBER","KUAFÖR","AŞÇI","GARSON","BACI","HİZMETLİ","ŞOFÖR",
+            "MUHASEBE","MEMUR","BANKACI","GAZETECİ","EDITÖR","YÖNETMEN","PRODÜKTÖR","TEKNİSYEN","OPERATÖR","PROGRAMCI",
+            "TASARIMCI","REHBER","TERCÜMAN","DİPLOMAT","BÜROKRAT","VATANDAŞ","YABANCI","MÜLTECİ","GÖÇMEN","YOLCU",
+            "TURİST","TACİR","ESNAF","PAZARCI","MANAV","KASAP","EKMEKÇİ","SÜTÇÜ","BALIKÇI","AVCI",
+            "ÇOBAN","RENDA","İŞÇİ","AMELE","USTA","KALFA","ÇIRAK","PATRON","MÜDÜR","ŞEF",
+            "BAŞKAN","VEKİL","ÜYE","ADAY","SEÇMEN","YARGIÇ","JÜRİ","TANIK","SANIK","MAHKUM",
+            "MAĞDUR","KURBAN","ŞAHİT","DELİL","KANIT","BELGE","EVRAK","DOSYA","RAPOR","TUTANAK",
+            "ZABIT","MEKTUP","POSTA","KARGO","TESLİMAT","PAKET","KOLİ","ZARF","ETİKET","BARKOD",
+            "FATURA","FİŞ","SENED","ÇEK","TEMİNAT","KEFİL","BORÇ","ALACAK","FAİZ","KAR",
+            "ZARAR","KÂR","GİDER","GELİR","BÜTÇE","VERGİ","HARAÇ","RESMİ","GAYRİRESMİ","RESMİ",
+            "YASAL","YASADISI","MEŞRU","MEŞRULAŞTIRILMIŞ","MEŞRULAŞTIRILMAMIŞ","MEŞRULAŞTIRILAN","MEŞRULAŞTIRILAMAYAN","MEŞRULAŞTIRILACAK","MEŞRULAŞTIRILMAK","MEŞRULAŞTIRILDI"
+        ].filter(w => w.length === 5);
 
-        let TARGET, currentRow, currentTile, grid, guessRows;
+        const TARGET = words[Math.floor(Math.random() * words.length)];
+        let currentRow = 0;
+        let currentTile = 0;
+        const grid = document.getElementById('grid');
+        const guessRows = Array(6).fill().map(() => Array(5).fill(''));
 
-        function initGame() {
-            TARGET = words[Math.floor(Math.random() * words.length)];
-            currentRow = 0;
-            currentTile = 0;
-            grid = document.getElementById('grid');
-            guessRows = Array(6).fill().map(() => Array(5).fill(''));
-            createGrid();
-        }
-
-        function createGrid() {
-            for (let i = 0; i < 6; i++) {
-                const row = document.createElement('div');
-                row.className = 'row';
-                for (let j = 0; j < 5; j++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'tile';
-                    row.appendChild(tile);
-                }
-                grid.appendChild(row);
+        // Generate Grid
+        for (let i = 0; i < 6; i++) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            for (let j = 0; j < 5; j++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                row.appendChild(tile);
             }
+            grid.appendChild(row);
         }
 
         function showMessage(msg) {
             const el = document.getElementById('message');
             el.textContent = msg;
             el.style.display = 'block';
-            el.style.animation = 'none';
-            el.offsetHeight; /* trigger reflow */
-            el.style.animation = 'shake 0.5s';
             setTimeout(() => el.style.display = 'none', 2000);
         }
 
@@ -210,7 +282,6 @@
                 if (guess === TARGET) {
                     showMessage("🚀 MÜKEMMEL! 🚀");
                     document.querySelector('.header h1').textContent = "GÖREV TAMAMLANDI";
-                    document.querySelector('.header h1').style.color = "#22c55e";
                     grid.style.pointerEvents = 'none';
                 } else if (currentRow === 5) {
                     showMessage(`Oyun bitti: ${TARGET}`);
