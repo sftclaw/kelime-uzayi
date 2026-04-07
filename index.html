@@ -93,83 +93,37 @@
     </div>
 
     <script>
-        // Expanded and Cleaned 5-Letter Turkish Dictionary
-        const words = [
-            "BALIK", "KALEM", "KİTAP", "DÜNYA", "GÜNEŞ", "BULUT", "ÇİÇEK", "KAHVE", "SEVGİ", "BİLGİ",
-            "RENK", "MÜZİK", "RESİM", "DUVAR", "MASA", "KAPI", "CAM", "YOLCU", "GEMİ", "TREN",
-            "HAVA", "TOPRAK", "ATEŞ", "RÜZGAR", "YAĞMUR", "ŞİMŞEK", "YILDIZ", "GECE", "GÜNDÜZ",
-            "SABAH", "AKŞAM", "ZAMAN", "MEKAN", "UZAY", "ROKET", "GEZEGEN", "DENİZ", "KUM", "DAĞ",
-            "TEPE", "VADİ", "GÖL", "KÖPRÜ", "SOKAK", "MAHALLE", "ŞEHİR", "İLÇE", "KÖY", "ÜLKE",
-            "KITA", "ADA", "LİMAN", "İSKELE", "TEKNE", "YUNUS", "VATOZ", "MERCAN", "YOSUN", "PAHTA",
-            "KÖMÜR", "DEMİR", "BAKIR", "ALTIN", "GÜMÜŞ", "ELMAS", "YAKUT", "İNCİ", "MERMER", "KAYAÇ",
-            "ÇAMUR", "ÇAKIL", "GÜBRE", "DAL", "YAPRAK", "MEYVE", "SEBZE", "TAHIL", "ZEYTİN", "ÜZÜM",
-            "ELMA", "ARMUT", "AYVA", "ERİK", "KİRAZ", "VİŞNE", "DUT", "İNCİR", "NAR", "LİMON",
-            "MUZ", "KİVİ", "ÇİLEK", "CEVİZ", "FINDIK", "BADEM", "KESTANE", "MISIR", "BUĞDAY", "ARPА",
-            "PİRİNÇ", "NANE", "REYHAN", "TARHUN", "KEKİK", "HAVUÇ", "ŞALGAM", "PANCAR", "PATATES",
-            "SOĞAN", "SARIMSAK", "PİRASA", "LAHANA", "MARUL", "ROKA", "TERE", "PATLI", "BİBER",
-            "DOMAT", "SALAT", "KABAK", "NOHUT", "BARBU", "MAŞ", "KETEN", "SUSAM", "SOYA", "BAL",
-            "HELVA", "LOKUM", "PASTA", "KURAB", "BİSKÜ", "ŞEKER", "SÜT", "YOĞURT", "AYRAN", "PEYNİR",
-            "KAŞAR", "LOR", "KAYMAK", "FIRIN", "TAVA", "OCACK", "ÇATAL", "KAŞIK", "BIÇAK", "TABAK",
-            "KASE", "KUPA", "BARDAK", "ŞİŞE", "KAVA", "ÇAY", "KOLА", "GAZOZ", "ENERJİ", "SALEP",
-            "BOZA", "KÜNEFE", "BİTKİ", "ÇİMEN", "ÇALILAR", "ORMAN", "FİL", "ASLAN", "KAPLAN", "AYI",
-            "KURT", "TİLKİ", "ÇAKAL", "SANCAK", "SİNCAP", "KİRPI", "TAVŞAN", "YARASA", "FARE", "KUŞ",
-            "TAVUK", "HOROZ", "ÖRDEK", "KAZ", "KARTAL", "ŞAHİN", "ATMACA", "SERÇE", "KARGA", "LEYLEK",
-            "TURNА", "GÜVERCİN", "ARI", "KELEBEK", "SİNEK", "EŞEKARI", "KARIKUCA", "ÇEKİRGE", "AĞUSTOS",
-            "UĞURBÖCEĞİ", "ÖRÜMCEK", "AKREP", "PİRE", "BIT", "KENE", "MAYIS", "CIRBOĞA", "KURBAĞA",
-            "SEMENDER", "KERTENKELE", "YILAN", "TİMSAH", "KURBAĞA", "KİRAZ", "ŞEFTALİ", "KAYISI",
-            "BÖĞÜRTLEN", "AHUDUDU", "YABANMERSİNİ", "KARADUT", "BEYAZDUT", "ANTFISTIK", "ANANAS",
-            "GREYFURT", "MANDALİNA", "PORTAKAL", "HİNDİ", "PENGUEN", "DEVEKUŞU", "LEOPAR", "PARS",
-            "ÇİTA", "ZEBRA", "GİRAAF", "MAYMUN", "GORİL", "ŞEMPANZE", "KOALA", "KANGURU", "VOMBAT",
-            "PLATYPUS", "DOLPHIN", "KÖPEK", "KEDİ", "HAMSTER", "PAPAGAN", "MUHABBET", "KANARYA",
-            "KUMRU", "SAĞAN", "KIRLANGIÇ", "FLAMİNGO", "SAHİL", "PLAJ", "KORYAN", "ADALAR", "BOĞAZ",
-            "KANAL", "KÖRFEZ", "YARIMADA", "OKYANUS", "GÜNEY", "KUZEY", "DOĞU", "BATI", "MERKEZ",
-            "SAĞLAM", "ZAYIF", "HIZLI", "YAVAŞ", "UZUN", "KISA", "GENİŞ", "DAR", "KALIN", "İNCE",
-            "AĞIR", "HAFİF", "YUMUŞAK", "SERT", "TATLI", "ACI", "EKŞİ", "TUZLU", "ISLAK", "KURU",
-            "SICAK", "SOĞUK", "ILIK", "SERİN", "KARANLIK", "AYDINLIK", "PARLAK", "MAT", "AÇIK", "KAPALI",
-            "ESKİ", "YENİ", "GENÇ", "YAŞLI", "BÜYÜK", "KÜÇÜK", "İÇERİ", "DIŞARI", "YUKARI", "AŞAĞI",
-            "ÖNCE", "SONRA", "ŞİMDİ", "DAHA", "ÇOK", "AZ", "BİRİ", "İKİ", "ÜÇ", "DÖRT", "BEŞ",
-            "ALTI", "YEDİ", "SEKİZ", "DOKUZ", "ON", "YÜZ", "BİN", "MİLYON", "MİLYAR", "TRİLYON",
-            "SIFIR", "TAM", "YARIM", "ÇEYREK", "SAAT", "DAKİKA", "SANİYE", "GÜN", "HAFTA", "AY",
-            "YIL", "DEKAD", "YÜZYIL", "MİLENYUM", "ÇAĞ", "DEVİR", "DÖNEM", "SEZON", "BAHAR", "YAZ",
-            "GÜZ", "KIŞ", "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS",
-            "EYLÜL", "EKİM", "KASIM", "ARALIK", "PAZARTESİ", "SALI", "ÇARŞAMBA", "PERŞEMBE", "CUMA",
-            "CUMARTESİ", "PAZAR", "BUGÜN", "DÜN", "YARIN", "ÖTEKİ", "BERİKİ", "ŞURASI", "BURASI",
-            "ORASI", "HER", "BİR", "BAZI", "BİÇİMLİ", "FARKLI", "AYNI", "BENZER", "ZIT", "KARŞIT",
-            "DOĞRU", "YANLIŞ", "GERÇEK", "YALAN", "SAHTE", "ASİL", "SOYLU", "ALÇAK", "YÜCE", "ULU",
-            "KUTSAL", "LANETLİ", "ŞANSLI", "ŞANSSIZ", "BAHTLI", "KÖTÜ", "İYİ", "FENA", "GÜZEL",
-            "ÇİRKİN", "ŞIRİN", "TATLI", "SEVİM", "NALAN", "HAZİN", "GAMLI", "NEŞELİ", "VESİLE",
-            "HATIRA", "ANILAR", "GEÇMİŞ", "GELECEK", "GELEK", "GİDEN", "GELEN", "AKAN", "DURAN",
-            "KOŞAN", "UÇAN", "YÜRÜYEN", "OTURAN", "YATAN", "KALKAN", "İNEN", "ÇIKAN", "GİREN",
-            "ÇIKAN", "AÇAN", "KAPAN", "BAŞLAN", "BİTEN", "DEVAM", "SÜREN", "UZAYAN", "KISALAN",
-            "BÜYÜYEN", "KÜÇÜLEN", "ARTAN", "AZALAN", "YÜKSELEN", "ALENEN", "GİZLİ", "AŞİKAR", "BELLİ",
-            "MEÇHUL", "BİLİNEN", "BİLİNMEYEN", "GÖRÜNEN", "GİZLENEN", "SAKLI", "AÇIK", "KAPALI",
-            "KİLİTLİ", "AÇIKLIK", "KAPALILIK", "GİZLİLİK", "AŞİKLİK", "DOSTLUK", "DÜŞMANLIK", "SEVGİ",
-            "NEFRET", "İZDİHAM", "KALABALIK", "TENHA", "BOŞ", "DOLU", "TAMAM", "EKSİK", "FAZLA",
-            "ARTI", "EKSİ", "POZİTİF", "NEGATİF", "NÖTRAL", "ORTA", "MERKEZİ", "ÇEVRESEL", "YEREL",
-            "GLOBAL", "EVRENSEL", "KÜRESEL", "ULUSAL", "MİLLİ", "YERLİ", "YABANCI", "İÇSEL", "DIŞSAL",
-            "ÖZEL", "GENEL", "KAMU", "HUSUSİ", "ŞAHSİ", "BİREYSEL", "TOPLUMSAL", "SOSYAL", "KÜLTÜR",
-            "SANATSAL", "TARIHSİ", "DOĞAL", "YAPAY", "SUNİ", "GERÇEK", "SANAL", "DİJİTAL", "ANALOG",
-            "MODERN", "KLASİK", "ANTİK", "ESKİCİ", "YENİLİK", "DEVRİM", "İNKILAP", "DEĞİŞİM", "DÖNÜŞÜM",
-            "EVİRİM", "GELİŞİM", "BÜYÜME", "ÇOCUK", "ÇOCUKLAR", "YETİŞKİN", "İNSAN", "İNSANLAR",
-            "KADIN", "ERKEK", "KIZ", "OĞLAN", "BEBEK", "YAŞLI", "GINEŞ", "KARTAL", "DENİZCİ"
-        ].filter(w => w.length === 5 && !w.includes(',') && w.match(/^[A-ZĞÜŞİÖÇ]+$/));
+        // Massive Turkish Dictionary
+        let words = [];
+        fetch('words.json')
+            .then(response => response.json())
+            .then(data => {
+                words = data.filter(w => w.length === 5 && w.match(/^[A-ZĞÜŞİÖÇ]+$/));
+                initGame();
+            });
 
-        const TARGET = words[Math.floor(Math.random() * words.length)];
-        let currentRow = 0;
-        let currentTile = 0;
-        const grid = document.getElementById('grid');
-        const guessRows = Array(6).fill().map(() => Array(5).fill(''));
+        let TARGET, currentRow, currentTile, grid, guessRows;
 
-        // Generate Grid
-        for (let i = 0; i < 6; i++) {
-            const row = document.createElement('div');
-            row.className = 'row';
-            for (let j = 0; j < 5; j++) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                row.appendChild(tile);
+        function initGame() {
+            TARGET = words[Math.floor(Math.random() * words.length)];
+            currentRow = 0;
+            currentTile = 0;
+            grid = document.getElementById('grid');
+            guessRows = Array(6).fill().map(() => Array(5).fill(''));
+            createGrid();
+        }
+
+        function createGrid() {
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let j = 0; j < 5; j++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    row.appendChild(tile);
+                }
+                grid.appendChild(row);
             }
-            grid.appendChild(row);
         }
 
         function showMessage(msg) {
