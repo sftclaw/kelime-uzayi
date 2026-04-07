@@ -2,65 +2,68 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Kelime Uzayı 🚀</title>
     <style>
         :root {
-            --bg: #0f172a; --text: #f8fafc; --key-bg: #334155;
-            --correct: #22c55e; --present: #eab308; --absent: #1e293b;
+            --bg: #020617; --text: #f8fafc; --key-bg: #1e293b;
+            --correct: #10b981; --present: #f59e0b; --absent: #334155;
+            --border: #475569;
         }
+        * { box-sizing: border-box; }
         body {
-            background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif;
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0;
-            overflow-x: hidden; touch-action: manipulation;
+            overflow: hidden; touch-action: manipulation;
         }
-        .header { text-align: center; padding: 1rem; border-bottom: 1px solid #334155; width: 100%; max-width: 500px; }
-        .header h1 { margin: 0; font-size: 1.5rem; letter-spacing: 2px; background: linear-gradient(to right, #22c55e, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header { text-align: center; padding: 15px; width: 100%; border-bottom: 1px solid #1e293b; }
+        .header h1 { margin: 0; font-size: 1.8rem; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 900; letter-spacing: 1px; }
         
         .grid-container {
-            display: grid; grid-template-rows: repeat(6, 1fr); gap: 6px; padding: 20px;
-            width: 100%; max-width: 350px; flex-grow: 1; justify-content: center;
+            display: flex; flex-direction: column; gap: 8px; padding: 20px;
+            flex-grow: 1; justify-content: center; width: 100%; max-width: 400px;
         }
-        .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+        .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
         .tile {
-            border: 2px solid #334155; display: flex; align-items: center; justify-content: center;
-            font-size: 2rem; font-weight: bold; text-transform: uppercase; height: 60px;
-            transition: all 0.3s; border-radius: 8px; background: rgba(30, 41, 59, 0.5);
+            border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 800; text-transform: uppercase; height: 65px;
+            transition: all 0.2s; border-radius: 10px; background: rgba(15, 23, 42, 0.6);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .tile[data-state="correct"] { background: var(--correct); border-color: var(--correct); }
-        .tile[data-state="present"] { background: var(--present); border-color: var(--present); }
-        .tile[data-state="absent"] { background: var(--absent); border-color: var(--absent); }
-        .tile[data-state="active"] { border-color: #94a3b8; transform: scale(1.05); }
+        .tile[data-state="correct"] { background: var(--correct); border-color: var(--correct); color: #000; }
+        .tile[data-state="present"] { background: var(--present); border-color: var(--present); color: #000; }
+        .tile[data-state="absent"] { background: var(--absent); border-color: var(--absent); opacity: 0.7; }
+        .tile[data-state="active"] { border-color: #94a3b8; transform: scale(1.02); }
+        .tile.flip { transform: rotateX(90deg); }
         
         .keyboard {
-            display: flex; flex-direction: column; gap: 8px; padding: 15px; width: 100%;
-            max-width: 500px; background: #1e293b; border-top: 1px solid #334155;
+            display: flex; flex-direction: column; gap: 10px; padding: 15px; width: 100%;
+            max-width: 600px; background: #0f172a; border-top: 1px solid #1e293b;
         }
-        .key-row { display: flex; justify-content: center; gap: 6px; }
+        .key-row { display: flex; justify-content: center; gap: 8px; }
         .key {
-            background: var(--key-bg); color: white; border: none; padding: 15px 0;
-            border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; text-transform: uppercase;
-            font-size: 0.9rem; transition: background 0.2s; user-select: none;
+            background: var(--key-bg); color: white; border: none; padding: 18px 0;
+            border-radius: 8px; cursor: pointer; font-weight: 700; flex: 1; text-transform: uppercase;
+            font-size: 0.95rem; transition: all 0.1s; box-shadow: 0 2px 0 #0f172a;
         }
-        .key.large { flex: 1.5; font-size: 0.8rem; }
+        .key:active { transform: translateY(2px); box-shadow: none; }
+        .key.large { flex: 1.5; font-size: 0.8rem; background: #334155; }
         .key[data-state="correct"] { background: var(--correct); }
         .key[data-state="present"] { background: var(--present); }
-        .key[data-state="absent"] { background: var(--absent); opacity: 0.5; }
+        .key[data-state="absent"] { background: var(--absent); opacity: 0.4; }
 
         .message {
-            position: absolute; top: 10%; background: white; color: black; padding: 10px 20px;
-            border-radius: 4px; font-weight: bold; display: none; z-index: 10;
+            position: absolute; top: 15%; background: #f8fafc; color: #0f172a; padding: 12px 24px;
+            border-radius: 8px; font-weight: 800; display: none; z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .stats { margin-top: 10px; font-size: 0.8rem; color: #94a3b8; }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>KELİME UZAYI</h1>
-        <div class="stats">Galaktik Kelime Avı</div>
     </div>
     <div class="message" id="message"></div>
-    
     <div class="grid-container" id="grid"></div>
     
     <div class="keyboard" id="keyboard">
@@ -80,25 +83,84 @@
             <button class="key" data-key="i">i</button>
         </div>
         <div class="key-row">
-            <button class="key large" data-key="Enter">ENTER</button>
+            <button class="key large" data-key="Enter">GİR</button>
             <button class="key" data-key="z">z</button><button class="key" data-key="c">c</button>
             <button class="key" data-key="v">v</button><button class="key" data-key="b">b</button>
             <button class="key" data-key="n">n</button><button class="key" data-key="m">m</button>
             <button class="key" data-key="ö">ö</button><button class="key" data-key="ç">ç</button>
-            <button class="key large" data-key="Backspace">SİL</button>
+            <button class="key large" data-key="Backspace">⌫</button>
         </div>
     </div>
 
     <script>
-        // 5-Harfli Türkçe Kelime Havuzu
-        const words = ["KALEM", "KİTAP", "DÜNYA", "GÜNEŞ", "BULUT", "DENİZ", "ÇİÇEK", "KAHVE", "SEVGİ", "UMUTL", "BİLGİ", "RENK", "MÜZİK", "RESİM", "DUVAR", "KAPI", "PENCERE", "MASA", "SANDALYE", "BİLGİSAYAR", "TELEFON", "ARABA", "OTOBÜS", "uçAKL", "GEMİ", "TREN", "YOLCU", "HAVA", "TOPRAK", "ATEŞ", "SU", "RÜZGAR", "YAĞMUR", "KAR", "FIRTINA", "ŞİMŞEK", "YILDIZ", "GECE", "GÜNDÜZ", "SABAH", "AKŞAM", "ZAMAN", "MEKAN", "UZAY", "GALAKSİ", "GEZEGEN", "ASTEROİT", "KUYRUK", "ROKET", "UZAYLI", "TELESKOP", "MİKROSKOP", "LABORATUVAR", "DENEY", "KİMYA", "FİZİK", "BİYOLOJİ", "MATEMATİK", "TARİH", "COĞRAFYA", "FELSEFE", "PSİKOLOJİ", "SOSYOLOJİ", "EKONOMİ", "POLİTİKA", "HUKUK", "TIP", "MÜHENDİS", "MİMAR", "SANATÇI", "YAZAR", "ŞAİR", "RESAM", "MÜZİSYEN", "OYUNCU", "SPORCU", "GAZETE", "DERGİ", "RADYO", "TELEVİZYON", "İNTERNET", "SOSYAL", "MEDYA", "BİLGİ", "TEKNOLOJİ", "YAZILIM", "DONANIM", "AĞ", "VERİ", "ALGORİTMA", "YAPAY", "ZEKA", "ROBOT", "OTOMASYON", "SİBER", "GÜVENLİK", "ŞİFRE", "ANAHTAR", "KİLİT", "KAPI", "PENCERE", "BALKON", "TERAS", "BAHÇE", "PARK", "ORMAN", "DAĞ", "TEPE", "VADİ", "NEHİR", "GÖL", "ŞELALE", "KÖPRÜ", "YOL", "CADDE", "SOKAK", "MAHALLE", "ŞEHİR", "İL", "İLÇE", "KÖY", "KASABA", "ÜLKE", "KITA", "OKYANUS", "ADA", "YARIMADA", "KÖRFEZ", "BOĞAZ", "KANAL", "LİMAN", "İSKELE", "GEMİ", "TEKNE", "BALIK", "YUNUS", "BALİNA", "KÖPEKBALIĞI", "AHTAPOT", "YENGEÇ", "İSTAKOZ", "MİDYЕ", "SALYANGOZ", "KARİDES", "LEVREK", "ÇİPURA", "LÜFER", "HAMSİ", "PALAMUT", "İZMARİT", "KEFAL", "SAZAN", "ALABALIK", "SOMON", "TONBALIĞI", "KILICBALIĞI", "KÖPEK", "KEDİ", "KUŞ", "TAVUK", "HOROZ", "ÖRDEK", "KAZ", "HİNDİ", "DEVEKUŞU", "PENGUEN", "KARTAL", "ŞAHİN", "ATMACA", "BAAYKUŞ", "SERÇE", "KARGA", "LEYLEK", "TURNА", "FLAMİNGO", "PAPAGAN", "MUHABBETKUŞU", "KANARYA", "SERİN", "GÜVERCİN", "KUMRU", "SAĞAN", "KIRLANGIÇ", "ARI", "KELEBEK", "SİNEK", "KARASİNEK", "EŞEKARI", "YABANARISI", "KARIKUCA", "ÇEKİRGE", "CIRBOĞA", "AĞUSTOSBÖCEĞİ", "MAYISBÖCEĞİ", "UĞURBÖCEĞİ", "CIRRIT", "KIRKAYAK", "ÇİFTAYAK", "AKREP", "ÖRÜMCEK", "KENE", "PİRE", "BIT", "SİVİRİSİNEK", "AT SİNİRİSİNEĞİ", "DANABURNU", "HAMAMBÖCEĞİ", "GÜVE", "İYİCEBÖCEK", "MORS", "FİL", "ASLAN", "KAPLAN", "PARS", "ÇİTA", "ZEYBRA", "GİRAAF", "MAYMUN", "GORİL", "ŞEMPANZE", "ORANGUTAN", "AYI", "KURT", "TİLKİ", "ÇAKAL", "SANCAK", "KUNDUZ", "SİNCAP", "KİRPI", "TAVŞAN", "YARASA", "FARE", "SIÇAN", "HAMSTER", "DEGU", "GERBİL", "KİRİ", "VİZN", "SANCAK", "KUMLUCA", "DENİZTİĞİ", "FOK", "MORS", "BALİNA", "YUNUS", "KÖPEKBALIĞI", "VATOZ", "AHTAPOT", "KALAMAR", "MÜREKKEPBALIĞI", "DENİZANASI", "DENİZYILDIZI", "DENİZSALYANGOZU", "DENİZKESTANESİ", "MERCAN", "SÜNGER", "YOSUN", "PAHTA", "KÖMÜR", "DEMİR", "BAKIR", "ALTIN", "GÜMÜŞ", "PLATİN", "ELMAS", "YAKUT", "ZÜMÜRÜT", "İNCİ", "AMETİST", "KUARS", "MERMER", "GRANİT", "BAZALT", "KAYAÇ", "TOPRAK", "KİL", "ÇAMUR", "KUM", "ÇAKIL", "TOPRAK", "GÜBRE", "GÜDÜK", "DAL", "YAPRAK", "ÇİÇEK", "MEYVE", "SEBZE", "TAHIL", "BAKLAGİL", "ZEYTİN", "ÜZÜM", "ELMA", "ARMUT", "AYVA", "ŞEFTALİ", "KAYISI", "ERİK", "KİRAZ", "VİŞNE", "DUT", "İNCİR", "NAR", "PORTAKAL", "MANDALİNA", "LİMON", "GREYFURT", "MUZ", "ANANAS", "KİVİ", "ÇİLEK", "AHUDUDU", "BÖĞÜRTLEN", "YABANMERSİNİ", "KARADUT", "BEYAZDUT", "CEVİZ", "FINDIK", "BADEM", "FISTIK", "ANTPEFISTIK", "KESTANE", "GEVREK", "MISIR", "BUĞDAY", "ARPА", "ÇAVDAR", "YULAF", "PİRİNÇ", "KARABİBER", "KIMYON", "PAPRİKA", "NANE", "MAYDANOZ", "DEREOTU", "REYHAN", "TARHUN", "KEKİK", "ADAÇAYI", "PAPATYA", "ISIRGAN", "EBEGÜMESİ", "HINDIBA", "RADYKKA", "TURP", "HAVUÇ", "ŞALGAM", "PANCAR", "PATATES", "TATLIPATATES", "SOĞAN", "SARIMSAK", "PİRASA", "LAHANA", "KARNABAHAR", "BROKOLİ", "MARUL", "ROKA", "TERE", "KEREVİZSAP", "ENGİNAR", "PAZU", "ISPANAK", "PATLICAN", "BİBER", "DOMATES", "SALATALIK", "KABAK", "FASULYE", "BEZELYE", "BAKLA", "NOHUT", "MERCİMEK", "BARBUNYA", "BÖRÜLCE", "MAŞ", "PIRASA", "KETEN", "SUSAM", "AYÇİÇEĞİ", "SOYA", "YERFISTIĞI", "ZEYTİNYAĞI", "AYÇİÇEĞİYAĞI", "MISIRÖZÜYAĞI", "TEREYAĞI", "İÇYAĞI", "KUYRUKYAĞI", "SÜT", "YOĞURT", "AYRAN", "KEFİR", "PEYNİR", "KAŞAR", "BEYAZPEYNİR", "LOR", "ÇÖKELEK", "TULUM", "EZİNE", "LİVANYA", "GRUYERE", "PARMESAN", "MOZZARELLA", "RICOTTA", "CREAMCHEESE", "LABNE", "KAYMAK", "BAL", "REÇEL", "MARMELAT", "PEKMEZ", "HELVA", "LOKUM", "BAKLAVA", "KADAYIF", "KÜNEFE", "SÜTLAÇ", "GÜLLAÇ", "MUHALLEBİ", "KAZANDİBİ", "TAVUKGÖĞSÜ", "FIRIN", "SÜNGER", "KEK", "PASTA", "KURABİYE", "BİSKÜVİ", "GOFRET", "ÇİKOLATA", "ŞEKER", "ŞURUP", "REÇEL", "MARMELAT", "BAL", "PEKMEZ", "HELVA", "LOKUM", "AKIDE", "SERTŞEKER", "SAKIZ", "NELİ", "ŞEKERLİ", "ÇİKOLATALI", "MEYVELİ", "KREMLİ", "DONDURMA", "SORBET", "ŞERBET", "KOMPOSTO", "HOŞAF", "MEYVESUYU", "LİMONATA", "PORTAKALSUYU", "NARHİŞİM", "GAZOZ", "KOLA", "FANTA", "SPRITE", "ENERJİİÇECEĞİ", "SU", "MADENSUYU", "SODA", "ÇAY", "KAHVE", "TÜRKKAHVESİ", "NESCAFÉ", "LİMONLUÇAY", "İHLAMUR", "ADAÇAYI", "KUŞBURNU", "ZENCEFİL", "PAPATYAÇAYI", "YEŞİLÇAY", "BEYAZÇAY", "KIRMIZIÇAY", "SİYAHÇAY", "BİTKİÇAYI", "BITKI", "AYRAN", "ŞALGAM", "BOZA", "SALEP", "TÜRKKAHVESİ", "FİNCAN", "KAŞIK", "ÇATAL", "BIÇAK", "TABAK", "KASE", "KUPA", "BARDAK", "ŞİŞE", "KAVA", "SÜRAHİ", "TEPSİ", "TEPSİ", "SİNİ", "SOFRATAKIMI", "ÇATAL", "KAŞIK", "BIÇAK", "KEPÇE", "KEVGİR", "TAVA", "TENCERE", "DÜDÜKLÜTENCERE", "FRITÖZ", "MIKRODALGA", "FIÇIN", "OCACK", "ANKASTRE", "BUZDOLABI", "DERİNDONDURUCU", "ÇAMAŞIRMKİNESİ", "BUMAMAŞİNESİ", "BULAŞIKMAKİNESİ", "ELEKTRİKSÜPÜRGESİ", "ROBOT", "MİKSER", "BLENDER", "DOĞRAYICI", "KIRMACI", "KAVURMACI", "KIZARTMA", "HAŞLAMA", "BUHARDA", "PIŞIRMA", "FIRINDA", "IZGARADA", "MANGALDA", "KÖMÜRDE", "ODUNDA", "GAZDA", "ELEKTRİKTE", "INDÜKSİYONDA"];
-        
-        const TARGET = words[Math.floor(Math.random() * words.length)].toUpperCase();
+        // Expanded and Cleaned 5-Letter Turkish Dictionary
+        const words = [
+            "BALIK", "KALEM", "KİTAP", "DÜNYA", "GÜNEŞ", "BULUT", "ÇİÇEK", "KAHVE", "SEVGİ", "BİLGİ",
+            "RENK", "MÜZİK", "RESİM", "DUVAR", "MASA", "KAPI", "CAM", "YOLCU", "GEMİ", "TREN",
+            "HAVA", "TOPRAK", "ATEŞ", "RÜZGAR", "YAĞMUR", "ŞİMŞEK", "YILDIZ", "GECE", "GÜNDÜZ",
+            "SABAH", "AKŞAM", "ZAMAN", "MEKAN", "UZAY", "ROKET", "GEZEGEN", "DENİZ", "KUM", "DAĞ",
+            "TEPE", "VADİ", "GÖL", "KÖPRÜ", "SOKAK", "MAHALLE", "ŞEHİR", "İLÇE", "KÖY", "ÜLKE",
+            "KITA", "ADA", "LİMAN", "İSKELE", "TEKNE", "YUNUS", "VATOZ", "MERCAN", "YOSUN", "PAHTA",
+            "KÖMÜR", "DEMİR", "BAKIR", "ALTIN", "GÜMÜŞ", "ELMAS", "YAKUT", "İNCİ", "MERMER", "KAYAÇ",
+            "ÇAMUR", "ÇAKIL", "GÜBRE", "DAL", "YAPRAK", "MEYVE", "SEBZE", "TAHIL", "ZEYTİN", "ÜZÜM",
+            "ELMA", "ARMUT", "AYVA", "ERİK", "KİRAZ", "VİŞNE", "DUT", "İNCİR", "NAR", "LİMON",
+            "MUZ", "KİVİ", "ÇİLEK", "CEVİZ", "FINDIK", "BADEM", "KESTANE", "MISIR", "BUĞDAY", "ARPА",
+            "PİRİNÇ", "NANE", "REYHAN", "TARHUN", "KEKİK", "HAVUÇ", "ŞALGAM", "PANCAR", "PATATES",
+            "SOĞAN", "SARIMSAK", "PİRASA", "LAHANA", "MARUL", "ROKA", "TERE", "PATLI", "BİBER",
+            "DOMAT", "SALAT", "KABAK", "NOHUT", "BARBU", "MAŞ", "KETEN", "SUSAM", "SOYA", "BAL",
+            "HELVA", "LOKUM", "PASTA", "KURAB", "BİSKÜ", "ŞEKER", "SÜT", "YOĞURT", "AYRAN", "PEYNİR",
+            "KAŞAR", "LOR", "KAYMAK", "FIRIN", "TAVA", "OCACK", "ÇATAL", "KAŞIK", "BIÇAK", "TABAK",
+            "KASE", "KUPA", "BARDAK", "ŞİŞE", "KAVA", "ÇAY", "KOLА", "GAZOZ", "ENERJİ", "SALEP",
+            "BOZA", "KÜNEFE", "BİTKİ", "ÇİMEN", "ÇALILAR", "ORMAN", "FİL", "ASLAN", "KAPLAN", "AYI",
+            "KURT", "TİLKİ", "ÇAKAL", "SANCAK", "SİNCAP", "KİRPI", "TAVŞAN", "YARASA", "FARE", "KUŞ",
+            "TAVUK", "HOROZ", "ÖRDEK", "KAZ", "KARTAL", "ŞAHİN", "ATMACA", "SERÇE", "KARGA", "LEYLEK",
+            "TURNА", "GÜVERCİN", "ARI", "KELEBEK", "SİNEK", "EŞEKARI", "KARIKUCA", "ÇEKİRGE", "AĞUSTOS",
+            "UĞURBÖCEĞİ", "ÖRÜMCEK", "AKREP", "PİRE", "BIT", "KENE", "MAYIS", "CIRBOĞA", "KURBAĞA",
+            "SEMENDER", "KERTENKELE", "YILAN", "TİMSAH", "KURBAĞA", "KİRAZ", "ŞEFTALİ", "KAYISI",
+            "BÖĞÜRTLEN", "AHUDUDU", "YABANMERSİNİ", "KARADUT", "BEYAZDUT", "ANTFISTIK", "ANANAS",
+            "GREYFURT", "MANDALİNA", "PORTAKAL", "HİNDİ", "PENGUEN", "DEVEKUŞU", "LEOPAR", "PARS",
+            "ÇİTA", "ZEBRA", "GİRAAF", "MAYMUN", "GORİL", "ŞEMPANZE", "KOALA", "KANGURU", "VOMBAT",
+            "PLATYPUS", "DOLPHIN", "KÖPEK", "KEDİ", "HAMSTER", "PAPAGAN", "MUHABBET", "KANARYA",
+            "KUMRU", "SAĞAN", "KIRLANGIÇ", "FLAMİNGO", "SAHİL", "PLAJ", "KORYAN", "ADALAR", "BOĞAZ",
+            "KANAL", "KÖRFEZ", "YARIMADA", "OKYANUS", "GÜNEY", "KUZEY", "DOĞU", "BATI", "MERKEZ",
+            "SAĞLAM", "ZAYIF", "HIZLI", "YAVAŞ", "UZUN", "KISA", "GENİŞ", "DAR", "KALIN", "İNCE",
+            "AĞIR", "HAFİF", "YUMUŞAK", "SERT", "TATLI", "ACI", "EKŞİ", "TUZLU", "ISLAK", "KURU",
+            "SICAK", "SOĞUK", "ILIK", "SERİN", "KARANLIK", "AYDINLIK", "PARLAK", "MAT", "AÇIK", "KAPALI",
+            "ESKİ", "YENİ", "GENÇ", "YAŞLI", "BÜYÜK", "KÜÇÜK", "İÇERİ", "DIŞARI", "YUKARI", "AŞAĞI",
+            "ÖNCE", "SONRA", "ŞİMDİ", "DAHA", "ÇOK", "AZ", "BİRİ", "İKİ", "ÜÇ", "DÖRT", "BEŞ",
+            "ALTI", "YEDİ", "SEKİZ", "DOKUZ", "ON", "YÜZ", "BİN", "MİLYON", "MİLYAR", "TRİLYON",
+            "SIFIR", "TAM", "YARIM", "ÇEYREK", "SAAT", "DAKİKA", "SANİYE", "GÜN", "HAFTA", "AY",
+            "YIL", "DEKAD", "YÜZYIL", "MİLENYUM", "ÇAĞ", "DEVİR", "DÖNEM", "SEZON", "BAHAR", "YAZ",
+            "GÜZ", "KIŞ", "OCAK", "ŞUBAT", "MART", "NİSAN", "MAYIS", "HAZİRAN", "TEMMUZ", "AĞUSTOS",
+            "EYLÜL", "EKİM", "KASIM", "ARALIK", "PAZARTESİ", "SALI", "ÇARŞAMBA", "PERŞEMBE", "CUMA",
+            "CUMARTESİ", "PAZAR", "BUGÜN", "DÜN", "YARIN", "ÖTEKİ", "BERİKİ", "ŞURASI", "BURASI",
+            "ORASI", "HER", "BİR", "BAZI", "BİÇİMLİ", "FARKLI", "AYNI", "BENZER", "ZIT", "KARŞIT",
+            "DOĞRU", "YANLIŞ", "GERÇEK", "YALAN", "SAHTE", "ASİL", "SOYLU", "ALÇAK", "YÜCE", "ULU",
+            "KUTSAL", "LANETLİ", "ŞANSLI", "ŞANSSIZ", "BAHTLI", "KÖTÜ", "İYİ", "FENA", "GÜZEL",
+            "ÇİRKİN", "ŞIRİN", "TATLI", "SEVİM", "NALAN", "HAZİN", "GAMLI", "NEŞELİ", "VESİLE",
+            "HATIRA", "ANILAR", "GEÇMİŞ", "GELECEK", "GELEK", "GİDEN", "GELEN", "AKAN", "DURAN",
+            "KOŞAN", "UÇAN", "YÜRÜYEN", "OTURAN", "YATAN", "KALKAN", "İNEN", "ÇIKAN", "GİREN",
+            "ÇIKAN", "AÇAN", "KAPAN", "BAŞLAN", "BİTEN", "DEVAM", "SÜREN", "UZAYAN", "KISALAN",
+            "BÜYÜYEN", "KÜÇÜLEN", "ARTAN", "AZALAN", "YÜKSELEN", "ALENEN", "GİZLİ", "AŞİKAR", "BELLİ",
+            "MEÇHUL", "BİLİNEN", "BİLİNMEYEN", "GÖRÜNEN", "GİZLENEN", "SAKLI", "AÇIK", "KAPALI",
+            "KİLİTLİ", "AÇIKLIK", "KAPALILIK", "GİZLİLİK", "AŞİKLİK", "DOSTLUK", "DÜŞMANLIK", "SEVGİ",
+            "NEFRET", "İZDİHAM", "KALABALIK", "TENHA", "BOŞ", "DOLU", "TAMAM", "EKSİK", "FAZLA",
+            "ARTI", "EKSİ", "POZİTİF", "NEGATİF", "NÖTRAL", "ORTA", "MERKEZİ", "ÇEVRESEL", "YEREL",
+            "GLOBAL", "EVRENSEL", "KÜRESEL", "ULUSAL", "MİLLİ", "YERLİ", "YABANCI", "İÇSEL", "DIŞSAL",
+            "ÖZEL", "GENEL", "KAMU", "HUSUSİ", "ŞAHSİ", "BİREYSEL", "TOPLUMSAL", "SOSYAL", "KÜLTÜR",
+            "SANATSAL", "TARIHSİ", "DOĞAL", "YAPAY", "SUNİ", "GERÇEK", "SANAL", "DİJİTAL", "ANALOG",
+            "MODERN", "KLASİK", "ANTİK", "ESKİCİ", "YENİLİK", "DEVRİM", "İNKILAP", "DEĞİŞİM", "DÖNÜŞÜM",
+            "EVİRİM", "GELİŞİM", "BÜYÜME", "ÇOCUK", "ÇOCUKLAR", "YETİŞKİN", "İNSAN", "İNSANLAR",
+            "KADIN", "ERKEK", "KIZ", "OĞLAN", "BEBEK", "YAŞLI", "GINEŞ", "KARTAL", "DENİZCİ"
+        ].filter(w => w.length === 5 && !w.includes(',') && w.match(/^[A-ZĞÜŞİÖÇ]+$/));
+
+        const TARGET = words[Math.floor(Math.random() * words.length)];
         let currentRow = 0;
         let currentTile = 0;
         const grid = document.getElementById('grid');
+        const guessRows = Array(6).fill().map(() => Array(5).fill(''));
 
-        // Initialize Grid
+        // Generate Grid
         for (let i = 0; i < 6; i++) {
             const row = document.createElement('div');
             row.className = 'row';
@@ -114,47 +176,49 @@
             const el = document.getElementById('message');
             el.textContent = msg;
             el.style.display = 'block';
+            el.style.animation = 'none';
+            el.offsetHeight; /* trigger reflow */
+            el.style.animation = 'shake 0.5s';
             setTimeout(() => el.style.display = 'none', 2000);
         }
 
-        function handleKey(key) {
-            if (key === 'Enter') return submitGuess();
-            if (key === 'Backspace') return deleteLetter();
-            if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
-                const row = grid.children[currentRow];
-                const tile = row.children[currentTile];
-                tile.textContent = key.toLocaleUpperCase('tr');
-                tile.setAttribute('data-state', 'active');
-                currentTile++;
+        function updateGrid() {
+            const row = grid.children[currentRow];
+            for (let i = 0; i < 5; i++) {
+                row.children[i].textContent = guessRows[currentRow][i];
+                row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
             }
         }
 
-        function deleteLetter() {
-            if (currentTile > 0) {
-                currentTile--;
-                const row = grid.children[currentRow];
-                const tile = row.children[currentTile];
-                tile.textContent = '';
-                tile.removeAttribute('data-state');
+        function handleKey(key) {
+            if (key === 'Enter') {
+                submitGuess();
+            } else if (key === 'Backspace') {
+                if (currentTile > 0) {
+                    currentTile--;
+                    guessRows[currentRow][currentTile] = '';
+                    updateGrid();
+                }
+            } else if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
+                guessRows[currentRow][currentTile] = key.toLocaleUpperCase('tr');
+                currentTile++;
+                updateGrid();
             }
         }
 
         function submitGuess() {
-            if (currentTile !== 5) return showMessage("Yetersiz haruf!");
-            const guess = Array.from(grid.children[currentRow].children).map(t => t.textContent).join('');
+            const guess = guessRows[currentRow].join('');
             
-            if (!words.includes(guess)) return showMessage("Bu kelime yok!");
+            if (guess.length !== 5) return showMessage("Eksik harf!");
+            if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
 
             const targetArr = TARGET.split('');
             const guessArr = guess.split('');
-            const row = grid.children[currentRow];
-            
-            // Logic for coloring
             const states = Array(5).fill('absent');
             const targetCounts = {};
             targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
 
-            // First pass: Correct (Green)
+            // First pass: Greens
             guessArr.forEach((l, i) => {
                 if (l === targetArr[i]) {
                     states[i] = 'correct';
@@ -162,7 +226,7 @@
                 }
             });
 
-            // Second pass: Present (Yellow)
+            // Second pass: Yellows
             guessArr.forEach((l, i) => {
                 if (states[i] !== 'correct' && targetCounts[l] > 0) {
                     states[i] = 'present';
@@ -170,11 +234,14 @@
                 }
             });
 
-            // Apply styles and update keyboard
+            // Animate and Color
             guessArr.forEach((l, i) => {
-                const tile = row.children[i];
+                const tile = grid.children[currentRow].children[i];
                 setTimeout(() => {
+                    tile.classList.add('flip');
                     tile.setAttribute('data-state', states[i]);
+                    
+                    // Update keyboard
                     const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
                     if (key) {
                         const current = key.getAttribute('data-state');
@@ -182,18 +249,23 @@
                         else if (states[i] === 'present' && current !== 'correct') key.setAttribute('data-state', 'present');
                         else if (states[i] === 'absent' && current !== 'correct' && current !== 'present') key.setAttribute('data-state', 'absent');
                     }
-                }, i * 200);
+                }, i * 250);
             });
 
-            if (guess === TARGET) {
-                showMessage("TEBRİKLER! 🚀");
-                this.scene && this.scene.pause();
-            } else if (currentRow === 5) {
-                showMessage(`Oyun bitti! Kelime: ${TARGET}`);
-            } else {
-                currentRow++;
-                currentTile = 0;
-            }
+            setTimeout(() => {
+                if (guess === TARGET) {
+                    showMessage("🚀 MÜKEMMEL! 🚀");
+                    document.querySelector('.header h1').textContent = "GÖREV TAMAMLANDI";
+                    document.querySelector('.header h1').style.color = "#22c55e";
+                    grid.style.pointerEvents = 'none';
+                } else if (currentRow === 5) {
+                    showMessage(`Oyun bitti: ${TARGET}`);
+                    grid.style.pointerEvents = 'none';
+                } else {
+                    currentRow++;
+                    currentTile = 0;
+                }
+            }, 1500);
         }
 
         document.getElementById('keyboard').addEventListener('click', e => {
