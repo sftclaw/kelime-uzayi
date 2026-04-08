@@ -217,10 +217,10 @@
                     words = await response.json();
                     console.log('Loaded', words.length, 'words from words.json');
                 } else {
-                    throw new Error('words.json not available');
+                    throw new Error('words.json HTTP ' + response.status);
                 }
             } catch (e) {
-                console.warn('Using embedded word list');
+                console.warn('Fetch failed, using embedded list:', e.message);
                 words = [
                     "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
                     "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
@@ -238,6 +238,10 @@
                     "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
                     "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","FRAK","CEKET","BLAZER"
                 ].filter(w => w.length === 5);
+                console.log('Using embedded list, count:', words.length);
+            }
+            if (!words || words.length === 0) {
+                console.error('CRITICAL: words array is empty!');
             }
             startGame();
         }
@@ -414,7 +418,10 @@
         });
         
         // Initialize on page load
-        initGame();
+        initGame().catch(err => {
+            console.error('initGame failed:', err);
+            document.getElementById('grid').innerHTML = '<div style="color:red;padding:20px;">Yüklenemedi: ' + err.message + '</div>';
+        });
     </script>
 </body>
 </html>
