@@ -284,8 +284,7 @@
                     "DONDURMA","ÇİKOLATA","ŞEKER","KURABİYE","BİSKÜVİ","GOFRET","PASTA","KREM","PUDRA","ALLIK",
                     "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
                     "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","FRAK","CEKET","BLAZER"
-                ].filter(w => w.length === 5);
-                console.log('Using embedded list, count:', words.length);
+                ].filter(w => Array.from(w).length === 5);
             }
             if (!words || words.length === 0) {
                 console.error('CRITICAL: words array is empty!');
@@ -344,29 +343,6 @@
             }
             
             if (debugEl) debugEl.textContent += ' | tiles: ' + grid.children.length;
-        }
-
-            // Hide end screen
-            document.getElementById('endscreen').classList.remove('active');
-
-            // Reset header
-            document.querySelector('.header h1').textContent = 'KELİME UZAYI';
-            document.querySelector('.header .subtitle').textContent = 'Galaktik Kelime Avı';
-
-            // Reset keyboard
-            document.querySelectorAll('.key').forEach(k => k.removeAttribute('data-state'));
-
-            // Generate Grid
-            for (let i = 0; i < 6; i++) {
-                const row = document.createElement('div');
-                row.className = 'row';
-                for (let j = 0; j < 5; j++) {
-                    const tile = document.createElement('div');
-                    tile.className = 'tile';
-                    row.appendChild(tile);
-                }
-                grid.appendChild(row);
-            }
         }
 
         function showMessage(msg) {
