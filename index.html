@@ -9,6 +9,7 @@
             --bg: #020617; --text: #f8fafc; --key-bg: #1e293b;
             --correct: #10b981; --present: #f59e0b; --absent: #334155;
             --border: #475569;
+            --win-glow: #10b981; --lose-glow: #ef4444;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         html, body { 
@@ -77,14 +78,96 @@
             font-size: 0.9rem;
         }
 
+        /* End Screen Overlay */
+        .endscreen-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(2, 6, 23, 0.95);
+            display: none; justify-content: center; align-items: center;
+            z-index: 100; backdrop-filter: blur(8px);
+            animation: fadeIn 0.5s ease;
+        }
+        .endscreen-overlay.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .endscreen-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px 25px;
+            text-align: center;
+            max-width: 320px;
+            width: 90%;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: slideUp 0.4s ease;
+        }
+        @keyframes slideUp { from { transform: translateY(40px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .endscreen-title {
+            font-size: 1.8rem; font-weight: 900; margin-bottom: 8px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .endscreen-title.win { color: var(--correct); text-shadow: 0 0 20px var(--win-glow); }
+        .endscreen-title.lose { color: #ef4444; text-shadow: 0 0 20px var(--lose-glow); }
+
+        .endscreen-subtitle {
+            font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;
+        }
+
+        .target-word {
+            font-size: 2rem; font-weight: 900;
+            color: var(--text);
+            background: rgba(255,255,255,0.05);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 2px solid var(--border);
+            margin-bottom: 25px;
+            display: inline-block;
+            letter-spacing: 4px;
+        }
+        .target-word .label {
+            display: block; font-size: 0.7rem; color: #64748b; letter-spacing: 2px; margin-bottom: 5px;
+        }
+
+        .endscreen-stats {
+            display: flex; justify-content: center; gap: 30px;
+            margin-bottom: 25px;
+            padding: 15px; background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        .stat {
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .stat-value {
+            font-size: 1.5rem; font-weight: 900; color: #38bdf8;
+        }
+        .stat-label {
+            font-size: 0.7rem; color: #64748b; text-transform: uppercase;
+        }
+
+        .btn-new-game {
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            color: #0f172a;
+            border: none;
+            padding: 16px 40px;
+            border-radius: 10px;
+            font-size: 1rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(56, 189, 248, 0.3);
+        }
+        .btn-new-game:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+        }
+        .btn-new-game:active { transform: scale(0.98); }
+
         @media (max-height: 650px) {
-            .header { padding: 8px 15px; }
-            .header h1 { font-size: 1.2rem; }
-            .grid-container { gap: 5px; padding: 10px; }
-            .row { gap: 5px; }
-            .tile { font-size: 1.5rem; max-height: 54px; }
-            .keyboard { gap: 6px; padding: 8px 4px; }
-            .key { padding: 10px 0; min-height: 44px; font-size: 0.8rem; }
+            .endscreen-card { padding: 20px 15px; }
+            .endscreen-title { font-size: 1.5rem; }
+            .target-word { font-size: 1.6rem; padding: 12px 20px; }
+            .btn-new-game { padding: 14px 30px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -93,52 +176,54 @@
         <h1>KELİME UZAYI</h1>
         <div class="subtitle">Galaktik Kelime Avı</div>
     </div>
-    <div class="message" id="message"></div>
-    <div class="grid-container" id="grid"></div>
-    
-    <div class="keyboard" id="keyboard">
-        <div class="key-row">
-            <button class="key" data-key="e">e</button><button class="key" data-key="r">r</button>
-            <button class="key" data-key="t">t</button><button class="key" data-key="y">y</button>
-            <button class="key" data-key="u">u</button><button class="key" data-key="ı">ı</button>
-            <button class="key" data-key="o">o</button><button class="key" data-key="p">p</button>
-            <button class="key" data-key="ğ">ğ</button><button class="key" data-key="ü">ü</button>
-        </div>
-        <div class="key-row">
-            <button class="key" data-key="a">a</button><button class="key" data-key="s">s</button>
-            <button class="key" data-key="d">d</button><button class="key" data-key="f">f</button>
-            <button class="key" data-key="g">g</button><button class="key" data-key="h">h</button>
-            <button class="key" data-key="j">j</button><button class="key" data-key="k">k</button>
-            <button class="key" data-key="l">l</button><button class="key" data-key="ş">ş</button>
-            <button class="key" data-key="i">i</button>
-        </div>
-        <div class="key-row">
-            <button class="key large" data-key="Enter">GİR</button>
-            <button class="key" data-key="z">z</button><button class="key" data-key="c">c</button>
-            <button class="key" data-key="v">v</button><button class="key" data-key="b">b</button>
-            <button class="key" data-key="n">n</button><button class="key" data-key="m">m</button>
-            <button class="key" data-key="ö">ö</button><button class="key" data-key="ç">ç</button>
-            <button class="key large" data-key="Backspace">⌫</button>
+
+    <!-- End Screen Overlay -->
+    <div class="endscreen-overlay" id="endscreen">
+        <div class="endscreen-card">
+            <div class="endscreen-title" id="endscreen-title">GÖREV TAMAMLANDI</div>
+            <div class="endscreen-subtitle" id="endscreen-subtitle">Mükemmel!</div>
+            <div class="target-word">
+                <span class="label">HEDEF KELİME</span>
+                <span id="target-display">KAĞIT</span>
+            </div>
+            <div class="endscreen-stats" id="endscreen-stats">
+                <div class="stat">
+                    <div class="stat-value" id="attempts-count">3</div>
+                    <div class="stat-label">Deneme</div>
+                </div>
+            </div>
+            <button class="btn-new-game" id="btn-restart">YENİ OYUN</button>
         </div>
     </div>
 
+    <div class="message" id="message"></div>
+    <div class="grid-container" id="grid"></div>
+    
     <script>
-        // Load words from external JSON, fallback to minimal curated list
-        let words = [];
+        // Global mutable state for restart
+        let gameState = {
+            words: [],
+            TARGET: '',
+            currentRow: 0,
+            currentTile: 0,
+            grid: null,
+            guessRows: null,
+            gameOver: false
+        };
         
+        // Load words from external JSON, fallback to embedded list
         async function initGame() {
             try {
                 const response = await fetch('words.json');
                 if (response.ok) {
-                    words = await response.json();
-                    console.log('Loaded', words.length, 'words from words.json');
+                    gameState.words = await response.json();
+                    console.log('Loaded', gameState.words.length, 'words from words.json');
                 } else {
                     throw new Error('words.json not available');
                 }
             } catch (e) {
-                console.warn('Fallback to embedded word list');
-                // Minimal fallback list (core Turkish words)
-                words = [
+                console.warn('Using embedded word list');
+                gameState.words = [
                     "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
                     "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
                     "MERCAN","YOSUN","KÖMÜR","DEMİR","BAKIR","ALTIN","GÜMÜŞ","ELMAS","YAKUT","İNCİ",
@@ -150,65 +235,39 @@
                     "PEYNİR","KAŞAR","YOĞURT","AYRAN","KAYMAK","FIRIN","ÇATAL","KAŞIK","BIÇAK","TABAK",
                     "BARDAK","LİMONATA","GAZOZ","SALEP","BOZA","ÇORBA","EKMEK","SİMİT","POĞAÇA","BÖREK",
                     "LAHMACUN","PİDE","DÖNER","KOKOREÇ","KÖFTE","PİLAV","BULGUR","KUSKUS","MAKARNA","ERİŞTE",
-                    "LAHANA","KARNIYARIK","İMAMBAYILDI","MUSAKKA","KÜNEFE","SÜTLAÇ","GÜLLAÇ","KAZANDİBİ","MUHALLEBİ","TAVUKGÖĞSÜ",
                     "BAKLAVA","KADAYIF","LOKUM","HELVA","PEKMEZ","MARMELAT","REÇEL","ŞERBET","HOŞAF","KOMPOSTO",
                     "DONDURMA","ÇİKOLATA","ŞEKER","KURABİYE","BİSKÜVİ","GOFRET","PASTA","KREM","PUDRA","ALLIK",
-                    "FONDÖTEN","RUJ","PARFÜM","DEODORANT","KREM","LOSİYON","MASKARA","EYELINER","PERMA","BOYA",
                     "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
-                    "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","SMOKİN","FRAK","CEKET","BLAZER",
-                    "KAZAK","TIŞÖRT","GÖMLEK","KRAVAT","PAPYON","FULAR","MENDİL","KEMER","SAAT","GÖZLÜK",
-                    "LENSE","AYAKKABI","BOT","ÇİZME","SANDAL","TERLİK","PALET","ŞNORKEL","KANO","KAYAK",
-                    "LEVREK","ÇİPURA","LÜFER","HAMSİ","PALAMUT","SAZAN","SOMON","KÖPEK","KEDİ","TAVUK",
-                    "HOROZ","ÖRDEK","KARTAL","ŞAHİN","ATMACA","SERÇE","KARGA","LEYLEK","GÜVERCİN","KUMRU",
-                    "ARI","KELEBEK","SİNEK","ÇEKİRGE","AKREP","ÖRÜMCEK","KENE","PİRE","BİT","ASLAN",
-                    "KAPLAN","PARS","ÇİTA","ZEBRA","ZÜRAFA","MAYMUN","GORİL","AYI","KURT","TİLKİ",
-                    "ÇAKAL","KUNDUZ","SİNCAP","KİRPI","TAVŞAN","YARASA","FARE","SIÇAN","HAMSTER","PENGUEN",
-                    "FLAMİNGO","PAPAGAN","KANARYA","SAHİL","PLAJ","BOĞAZ","KANAL","KÖRFEZ","OKYANUS","GÜNEY",
-                    "KUZEY","DOĞU","BATI","MERKEZ","HIZLI","YAVAŞ","UZUN","KISA","GENİŞ","DAR",
-                    "KALIN","İNCE","AĞIR","HAFİF","YUMUŞAK","SERT","TATLI","ACI","EKŞİ","TUZLU",
-                    "ISLAK","KURU","SICAK","SOĞUK","ILIK","SERİN","PARLAK","ESKİ","YENİ","GENÇ",
-                    "YAŞLI","BÜYÜK","KÜÇÜK","İÇERİ","DIŞARI","YUKARI","AŞAĞI","DOĞRU","YANLIŞ","GERÇEK",
-                    "YALAN","SAHTE","ASİL","SOYLU","YÜCE","KUTSAL","ŞANSLI","KÖTÜ","İYİ","GÜZEL",
-                    "ÇİRKİN","TATLI","SEVİM","NEŞELİ","HATIRA","ANILAR","GEÇMİŞ","GELECEK","GİDEN","GELEN",
-                    "AKAN","DURAN","KOŞAN","UÇAN","YÜRÜYEN","OTURAN","YATAN","KALKAN","İNEN","ÇIKAN",
-                    "GİREN","AÇAN","KAPAN","BAŞLAN","BİTEN","DEVAM","SÜREN","BÜYÜYEN","KÜÇÜLEN","ARTAN",
-                    "AZALAN","YÜKSELEN","GİZLİ","AŞİKAR","BELLİ","AÇIK","DOSTLUK","DÜŞMANLIK","NEFRET","KALABALIK",
-                    "TENHA","BOŞ","DOLU","TAMAM","EKSİK","FAZLA","ARTI","EKSİ","POZİTİF","NEGATİF",
-                    "ORTA","MERKEZİ","YEREL","GLOBAL","KÜRESEL","ULUSAL","MİLLİ","YERLİ","YABANCI","İÇSEL",
-                    "DIŞSAL","ÖZEL","GENEL","KAMU","HUSUSİ","ŞAHSİ","SOSYAL","KÜLTÜR","DOĞAL","YAPAY",
-                    "SUNİ","SANAL","DİJİTAL","ANALOG","MODERN","KLASİK","ANTİK","YENİLİK","DEVRİM","DEĞİŞİM",
-                    "DÖNÜŞÜM","EVİRİM","GELİŞİM","BÜYÜME","ÇOCUK","YETİŞKİN","İNSAN","KADIN","ERKEK","KIZ",
-                    "OĞLAN","BEBEK","YAŞLI","KARTAL","DENİZCİ","ZAMAN","MEKAN","UZAY","ROKET","GEZEGEN",
-                    "ASTEROİD","KUYRUK","METEOR","KOMETA","GALAKSİ","NEBULA","PULSAR","KUASAR","NOVA","SÜPERNOVA",
-                    "KARADELİK","YILDIZ","GÖKCİSİM","TELESKOP","MİKROSKOP","LABORATUVAR","DENEY","KİMYA","FİZİK","BİYOLOJİ",
-                    "MATEMATİK","TARİH","COĞRAFYA","FELSEFE","PSİKOLOJİ","SOSYOLOJİ","EKONOMİ","POLİTİKA","HUKUK","TIP",
-                    "MÜHENDİS","MİMAR","SANATÇI","YAZAR","ŞAİR","RESSAM","MÜZİSYEN","OYUNCU","SPORCU","ÖĞRETMEN",
-                    "DOKTOR","HEMŞİRE","AVUKAT","HAKİM","SAVCI","POLİS","ASKER","PİLOT","KAPTAN","DENİZCİ",
-                    "MARANGOZ","DEMİRCİ","ÇİFTÇİ","BERBER","KUAFÖR","AŞÇI","GARSON","BACI","HİZMETLİ","ŞOFÖR",
-                    "MUHASEBE","MEMUR","BANKACI","GAZETECİ","EDITÖR","YÖNETMEN","PRODÜKTÖR","TEKNİSYEN","OPERATÖR","PROGRAMCI",
-                    "TASARIMCI","REHBER","TERCÜMAN","DİPLOMAT","BÜROKRAT","VATANDAŞ","YABANCI","MÜLTECİ","GÖÇMEN","YOLCU",
-                    "TURİST","TACİR","ESNAF","PAZARCI","MANAV","KASAP","EKMEKÇİ","SÜTÇÜ","BALIKÇI","AVCI",
-                    "ÇOBAN","RENDA","İŞÇİ","AMELE","USTA","KALFA","ÇIRAK","PATRON","MÜDÜR","ŞEF",
-                    "BAŞKAN","VEKİL","ÜYE","ADAY","SEÇMEN","YARGIÇ","JÜRİ","TANIK","SANIK","MAHKUM",
-                    "MAĞDUR","KURBAN","ŞAHİT","DELİL","KANIT","BELGE","EVRAK","DOSYA","RAPOR","TUTANAK",
-                    "ZABIT","MEKTUP","POSTA","KARGO","TESLİMAT","PAKET","KOLİ","ZARF","ETİKET","BARKOD",
-                    "FATURA","FİŞ","SENED","ÇEK","TEMİNAT","KEFİL","BORÇ","ALACAK","FAİZ","KAR",
-                    "ZARAR","KÂR","GİDER","GELİR","BÜTÇE","VERGİ","HARAÇ","RESMİ","GAYRİRESMİ","RESMİ",
-                    "YASAL","YASADISI","MEŞRU","MEŞRULAŞTIRILMIŞ","MEŞRULAŞTIRILMAMIŞ","MEŞRULAŞTIRILAN","MEŞRULAŞTIRILAMAYAN","MEŞRULAŞTIRILACAK","MEŞRULAŞTIRILMAK","MEŞRULAŞTIRILDI"
+                    "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","FRAK","CEKET","BLAZER"
                 ].filter(w => w.length === 5);
             }
-            
-            // Now start the game
             startGame();
         }
         
         function startGame() {
-            const TARGET = words[Math.floor(Math.random() * words.length)];
-            let currentRow = 0;
-            let currentTile = 0;
+            // Reset state
+            gameState.TARGET = gameState.words[Math.floor(Math.random() * gameState.words.length)];
+            gameState.currentRow = 0;
+            gameState.currentTile = 0;
+            gameState.gameOver = false;
+            
             const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            gameState.grid = grid;
+            
             const guessRows = Array(6).fill().map(() => Array(5).fill(''));
-    
+            gameState.guessRows = guessRows;
+            
+            // Hide end screen
+            document.getElementById('endscreen').classList.remove('active');
+            
+            // Reset header
+            document.querySelector('.header h1').textContent = 'KELİME UZAYI';
+            document.querySelector('.header .subtitle').textContent = 'Galaktik Kelime Avı';
+            
+            // Reset keyboard
+            document.querySelectorAll('.key').forEach(k => k.removeAttribute('data-state'));
+            
             // Generate Grid
             for (let i = 0; i < 6; i++) {
                 const row = document.createElement('div');
@@ -220,104 +279,143 @@
                 }
                 grid.appendChild(row);
             }
-    
-            function showMessage(msg) {
-                const el = document.getElementById('message');
-                el.textContent = msg;
-                el.style.display = 'block';
-                setTimeout(() => el.style.display = 'none', 2000);
+        }
+        
+        function showMessage(msg) {
+            const el = document.getElementById('message');
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 2000);
+        }
+        
+        function updateGrid() {
+            const row = grid.children[currentRow];
+            for (let i = 0; i < 5; i++) {
+                row.children[i].textContent = guessRows[currentRow][i];
+                row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
             }
+        }
+        
+        function submitGuess() {
+            const guess = guessRows[currentRow].join('');
+            
+            if (guess.length !== 5) return showMessage("Eksik harf!");
+            if (!gameState.words.includes(guess)) return showMessage("Bu kelime listede yok!");
     
-            function updateGrid() {
-                const row = grid.children[currentRow];
-                for (let i = 0; i < 5; i++) {
-                    row.children[i].textContent = guessRows[currentRow][i];
-                    row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
+            const targetArr = TARGET.split('');
+            const guessArr = guess.split('');
+            const states = Array(5).fill('absent');
+            const targetCounts = {};
+            targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
+    
+            // First pass: Greens
+            guessArr.forEach((l, i) => {
+                if (l === targetArr[i]) {
+                    states[i] = 'correct';
+                    targetCounts[l]--;
                 }
-            }
+            });
     
-            function handleKey(key) {
-                if (key === 'Enter') {
-                    submitGuess();
-                } else if (key === 'Backspace') {
-                    if (currentTile > 0) {
-                        currentTile--;
-                        guessRows[currentRow][currentTile] = '';
-                        updateGrid();
+            // Second pass: Yellows
+            guessArr.forEach((l, i) => {
+                if (states[i] !== 'correct' && targetCounts[l] > 0) {
+                    states[i] = 'present';
+                    targetCounts[l]--;
+                }
+            });
+    
+            // Animate and Color
+            guessArr.forEach((l, i) => {
+                const tile = grid.children[currentRow].children[i];
+                setTimeout(() => {
+                    tile.classList.add('flip');
+                    tile.setAttribute('data-state', states[i]);
+                    
+                    // Update keyboard
+                    const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
+                    if (key) {
+                        const current = key.getAttribute('data-state');
+                        if (states[i] === 'correct') key.setAttribute('data-state', 'correct');
+                        else if (states[i] === 'present' && current !== 'correct') key.setAttribute('data-state', 'present');
+                        else if (states[i] === 'absent' && current !== 'correct' && current !== 'present') key.setAttribute('data-state', 'absent');
                     }
-                } else if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
-                    guessRows[currentRow][currentTile] = key.toLocaleUpperCase('tr');
-                    currentTile++;
+                }, i * 250);
+            });
+    
+            setTimeout(() => {
+                if (guess === TARGET) {
+                    // WIN - show end screen
+                    showEndScreen(true);
+                } else if (currentRow === 5) {
+                    // LOSE - show end screen
+                    showEndScreen(false);
+                } else {
+                    currentRow++;
+                    currentTile = 0;
+                }
+            }, 1500);
+        }
+        
+        function showEndScreen(won) {
+            gameState.gameOver = true;
+            const overlay = document.getElementById('endscreen');
+            const title = document.getElementById('endscreen-title');
+            const subtitle = document.getElementById('endscreen-subtitle');
+            const targetDisplay = document.getElementById('target-display');
+            const attemptsEl = document.getElementById('attempts-count');
+            const statsEl = document.getElementById('endscreen-stats');
+            
+            if (won) {
+                title.textContent = 'GÖREV TAMAMLANDI';
+                title.className = 'endscreen-title win';
+                subtitle.textContent = 'Mükemmel! Kelimeyi buldun!';
+            } else {
+                title.textContent = 'OYUN BİTTİ';
+                title.className = 'endscreen-title lose';
+                subtitle.textContent = 'Başka bir zaman tekrar dene!';
+            }
+            
+            targetDisplay.textContent = TARGET;
+            attemptsEl.textContent = currentRow + 1;
+            
+            // Hide stats on loss (only show attempts on win if desired)
+            if (!won) {
+                statsEl.style.display = 'none';
+            } else {
+                statsEl.style.display = 'flex';
+            }
+            
+            overlay.classList.add('active');
+            grid.style.pointerEvents = 'none';
+        }
+        
+        function handleKey(key) {
+            if (gameState.gameOver) return;
+            
+            if (key === 'Enter') {
+                submitGuess();
+            } else if (key === 'Backspace') {
+                if (currentTile > 0) {
+                    currentTile--;
+                    guessRows[currentRow][currentTile] = '';
                     updateGrid();
                 }
+            } else if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
+                guessRows[currentRow][currentTile] = key.toLocaleUpperCase('tr');
+                currentTile++;
+                updateGrid();
             }
-    
-            function submitGuess() {
-                const guess = guessRows[currentRow].join('');
-                
-                if (guess.length !== 5) return showMessage("Eksik harf!");
-                if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
-    
-                const targetArr = TARGET.split('');
-                const guessArr = guess.split('');
-                const states = Array(5).fill('absent');
-                const targetCounts = {};
-                targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
-    
-                // First pass: Greens
-                guessArr.forEach((l, i) => {
-                    if (l === targetArr[i]) {
-                        states[i] = 'correct';
-                        targetCounts[l]--;
-                    }
-                });
-    
-                // Second pass: Yellows
-                guessArr.forEach((l, i) => {
-                    if (states[i] !== 'correct' && targetCounts[l] > 0) {
-                        states[i] = 'present';
-                        targetCounts[l]--;
-                    }
-                });
-    
-                // Animate and Color
-                guessArr.forEach((l, i) => {
-                    const tile = grid.children[currentRow].children[i];
-                    setTimeout(() => {
-                        tile.classList.add('flip');
-                        tile.setAttribute('data-state', states[i]);
-                        
-                        // Update keyboard
-                        const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
-                        if (key) {
-                            const current = key.getAttribute('data-state');
-                            if (states[i] === 'correct') key.setAttribute('data-state', 'correct');
-                            else if (states[i] === 'present' && current !== 'correct') key.setAttribute('data-state', 'present');
-                            else if (states[i] === 'absent' && current !== 'correct' && current !== 'present') key.setAttribute('data-state', 'absent');
-                        }
-                    }, i * 250);
-                });
-    
-                setTimeout(() => {
-                    if (guess === TARGET) {
-                        showMessage("🚀 MÜKEMMEL! 🚀");
-                        document.querySelector('.header h1').textContent = "GÖREV TAMAMLANDI";
-                        grid.style.pointerEvents = 'none';
-                    } else if (currentRow === 5) {
-                        showMessage(`Oyun bitti: ${TARGET}`);
-                        grid.style.pointerEvents = 'none';
-                    } else {
-                        currentRow++;
-                        currentTile = 0;
-                    }
-                }, 1500);
-            }
-    
-            document.getElementById('keyboard').addEventListener('click', e => {
-                if (e.target.classList.contains('key')) handleKey(e.target.dataset.key);
-            });
-            document.addEventListener('keydown', e => handleKey(e.key));
         }
+        
+        document.getElementById('keyboard').addEventListener('click', e => {
+            if (e.target.classList.contains('key')) handleKey(e.target.dataset.key);
+        });
+        document.addEventListener('keydown', e => handleKey(e.key));
+        
+        // Restart button
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            startGame();
+        });
         
         // Initialize on page load
         initGame();
