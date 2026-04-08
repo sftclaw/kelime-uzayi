@@ -178,7 +178,7 @@
     </div>
 
     <!-- Debug info (remove later) -->
-    <div id="debug-info" style="position:fixed;top:10px;left:10px;font-size:10px;color:#f59e0b;z-index:999;background:rgba(0,0,0,0.7);padding:5px 8px;border-radius:4px;">Loading...</div>
+    <div id="debug-info" style="position:fixed;top:10px;left:10px;font-size:10px;color:#f59e0b;z-index:999;background:rgba(0,0,0,0.7);padding:5px 8px;border-radius:4px;display:none;">Loading...</div>
 
     <!-- End Screen Overlay -->
     <div class="endscreen-overlay" id="endscreen">
@@ -456,7 +456,7 @@
         function handleKey(key) {
             if (gameOver) return;
 
-            if (key === 'Enter') {
+            if (key === 'Enter' || key === 'enter') {
                 submitGuess();
             } else if (key === 'Backspace') {
                 if (currentTile > 0) {
