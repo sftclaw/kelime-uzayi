@@ -123,180 +123,204 @@
     </div>
 
     <script>
-        // Clean, curated list of real 5-letter Turkish words
-        const words = [
-            "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
-            "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
-            "MERCAN","YOSUN","KÖMÜR","DEMİR","BAKIR","ALTIN","GÜMÜŞ","ELMAS","YAKUT","İNCİ",
-            "MERMER","ÇAMUR","ÇAKIL","YAPRAK","MEYVE","SEBZE","TAHIL","ZEYTİN","ÜZÜM","ELMA",
-            "ARMUT","AYVA","ERİK","KİRAZ","VİŞNE","İNCİR","LİMON","ÇİLEK","CEVİZ","FINDIK",
-            "BADEM","MISIR","BUĞDAY","ARPA","PİRİNÇ","NANE","REYHAN","KEKİK","HAVUÇ","ŞALGAM",
-            "PANCAR","PATATES","SOĞAN","SARIMSAK","LAHANA","MARUL","BİBER","DOMATES","KABAK",
-            "NOHUT","FASULYE","BEZELYE","BAKLA","MERCİMEK","BARBUNYA","BÖRÜLCE","KETEN","SUSAM",
-            "PEYNİR","KAŞAR","YOĞURT","AYRAN","KAYMAK","FIRIN","ÇATAL","KAŞIK","BIÇAK","TABAK",
-            "BARDAK","LİMONATA","GAZOZ","SALEP","BOZA","ÇORBA","EKMEK","SİMİT","POĞAÇA","BÖREK",
-            "LAHMACUN","PİDE","DÖNER","KOKOREÇ","KÖFTE","PİLAV","BULGUR","KUSKUS","MAKARNA","ERİŞTE",
-            "LAHANA","KARNIYARIK","İMAMBAYILDI","MUSAKKA","KÜNEFE","SÜTLAÇ","GÜLLAÇ","KAZANDİBİ","MUHALLEBİ","TAVUKGÖĞSÜ",
-            "BAKLAVA","KADAYIF","LOKUM","HELVA","PEKMEZ","MARMELAT","REÇEL","ŞERBET","HOŞAF","KOMPOSTO",
-            "DONDURMA","ÇİKOLATA","ŞEKER","KURABİYE","BİSKÜVİ","GOFRET","PASTA","KREM","PUDRA","ALLIK",
-            "FONDÖTEN","RUJ","PARFÜM","DEODORANT","KREM","LOSİYON","MASKARA","EYELINER","PERMA","BOYA",
-            "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
-            "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","SMOKİN","FRAK","CEKET","BLAZER",
-            "KAZAK","TIŞÖRT","GÖMLEK","KRAVAT","PAPYON","FULAR","MENDİL","KEMER","SAAT","GÖZLÜK",
-            "LENSE","AYAKKABI","BOT","ÇİZME","SANDAL","TERLİK","PALET","ŞNORKEL","KANO","KAYAK",
-            "LEVREK","ÇİPURA","LÜFER","HAMSİ","PALAMUT","SAZAN","SOMON","KÖPEK","KEDİ","TAVUK",
-            "HOROZ","ÖRDEK","KARTAL","ŞAHİN","ATMACA","SERÇE","KARGA","LEYLEK","GÜVERCİN","KUMRU",
-            "ARI","KELEBEK","SİNEK","ÇEKİRGE","AKREP","ÖRÜMCEK","KENE","PİRE","BİT","ASLAN",
-            "KAPLAN","PARS","ÇİTA","ZEBRA","ZÜRAFA","MAYMUN","GORİL","AYI","KURT","TİLKİ",
-            "ÇAKAL","KUNDUZ","SİNCAP","KİRPI","TAVŞAN","YARASA","FARE","SIÇAN","HAMSTER","PENGUEN",
-            "FLAMİNGO","PAPAGAN","KANARYA","SAHİL","PLAJ","BOĞAZ","KANAL","KÖRFEZ","OKYANUS","GÜNEY",
-            "KUZEY","DOĞU","BATI","MERKEZ","HIZLI","YAVAŞ","UZUN","KISA","GENİŞ","DAR",
-            "KALIN","İNCE","AĞIR","HAFİF","YUMUŞAK","SERT","TATLI","ACI","EKŞİ","TUZLU",
-            "ISLAK","KURU","SICAK","SOĞUK","ILIK","SERİN","PARLAK","ESKİ","YENİ","GENÇ",
-            "YAŞLI","BÜYÜK","KÜÇÜK","İÇERİ","DIŞARI","YUKARI","AŞAĞI","DOĞRU","YANLIŞ","GERÇEK",
-            "YALAN","SAHTE","ASİL","SOYLU","YÜCE","KUTSAL","ŞANSLI","KÖTÜ","İYİ","GÜZEL",
-            "ÇİRKİN","TATLI","SEVİM","NEŞELİ","HATIRA","ANILAR","GEÇMİŞ","GELECEK","GİDEN","GELEN",
-            "AKAN","DURAN","KOŞAN","UÇAN","YÜRÜYEN","OTURAN","YATAN","KALKAN","İNEN","ÇIKAN",
-            "GİREN","AÇAN","KAPAN","BAŞLAN","BİTEN","DEVAM","SÜREN","BÜYÜYEN","KÜÇÜLEN","ARTAN",
-            "AZALAN","YÜKSELEN","GİZLİ","AŞİKAR","BELLİ","AÇIK","DOSTLUK","DÜŞMANLIK","NEFRET","KALABALIK",
-            "TENHA","BOŞ","DOLU","TAMAM","EKSİK","FAZLA","ARTI","EKSİ","POZİTİF","NEGATİF",
-            "ORTA","MERKEZİ","YEREL","GLOBAL","KÜRESEL","ULUSAL","MİLLİ","YERLİ","YABANCI","İÇSEL",
-            "DIŞSAL","ÖZEL","GENEL","KAMU","HUSUSİ","ŞAHSİ","SOSYAL","KÜLTÜR","DOĞAL","YAPAY",
-            "SUNİ","SANAL","DİJİTAL","ANALOG","MODERN","KLASİK","ANTİK","YENİLİK","DEVRİM","DEĞİŞİM",
-            "DÖNÜŞÜM","EVİRİM","GELİŞİM","BÜYÜME","ÇOCUK","YETİŞKİN","İNSAN","KADIN","ERKEK","KIZ",
-            "OĞLAN","BEBEK","YAŞLI","KARTAL","DENİZCİ","ZAMAN","MEKAN","UZAY","ROKET","GEZEGEN",
-            "ASTEROİT","KUYRUK","METEOR","KOMETA","GALAKSİ","NEBULA","PULSAR","KUASAR","NOVA","SÜPERNOVA",
-            "KARADELİK","YILDIZ","GÖKCİSİM","TELESKOP","MİKROSKOP","LABORATUVAR","DENEY","KİMYA","FİZİK","BİYOLOJİ",
-            "MATEMATİK","TARİH","COĞRAFYA","FELSEFE","PSİKOLOJİ","SOSYOLOJİ","EKONOMİ","POLİTİKA","HUKUK","TIP",
-            "MÜHENDİS","MİMAR","SANATÇI","YAZAR","ŞAİR","RESSAM","MÜZİSYEN","OYUNCU","SPORCU","ÖĞRETMEN",
-            "DOKTOR","HEMŞİRE","AVUKAT","HAKİM","SAVCI","POLİS","ASKER","PİLOT","KAPTAN","DENİZCİ",
-            "MARANGOZ","DEMİRCİ","ÇİFTÇİ","BERBER","KUAFÖR","AŞÇI","GARSON","BACI","HİZMETLİ","ŞOFÖR",
-            "MUHASEBE","MEMUR","BANKACI","GAZETECİ","EDITÖR","YÖNETMEN","PRODÜKTÖR","TEKNİSYEN","OPERATÖR","PROGRAMCI",
-            "TASARIMCI","REHBER","TERCÜMAN","DİPLOMAT","BÜROKRAT","VATANDAŞ","YABANCI","MÜLTECİ","GÖÇMEN","YOLCU",
-            "TURİST","TACİR","ESNAF","PAZARCI","MANAV","KASAP","EKMEKÇİ","SÜTÇÜ","BALIKÇI","AVCI",
-            "ÇOBAN","RENDA","İŞÇİ","AMELE","USTA","KALFA","ÇIRAK","PATRON","MÜDÜR","ŞEF",
-            "BAŞKAN","VEKİL","ÜYE","ADAY","SEÇMEN","YARGIÇ","JÜRİ","TANIK","SANIK","MAHKUM",
-            "MAĞDUR","KURBAN","ŞAHİT","DELİL","KANIT","BELGE","EVRAK","DOSYA","RAPOR","TUTANAK",
-            "ZABIT","MEKTUP","POSTA","KARGO","TESLİMAT","PAKET","KOLİ","ZARF","ETİKET","BARKOD",
-            "FATURA","FİŞ","SENED","ÇEK","TEMİNAT","KEFİL","BORÇ","ALACAK","FAİZ","KAR",
-            "ZARAR","KÂR","GİDER","GELİR","BÜTÇE","VERGİ","HARAÇ","RESMİ","GAYRİRESMİ","RESMİ",
-            "YASAL","YASADISI","MEŞRU","MEŞRULAŞTIRILMIŞ","MEŞRULAŞTIRILMAMIŞ","MEŞRULAŞTIRILAN","MEŞRULAŞTIRILAMAYAN","MEŞRULAŞTIRILACAK","MEŞRULAŞTIRILMAK","MEŞRULAŞTIRILDI"
-        ].filter(w => w.length === 5);
-
-        const TARGET = words[Math.floor(Math.random() * words.length)];
-        let currentRow = 0;
-        let currentTile = 0;
-        const grid = document.getElementById('grid');
-        const guessRows = Array(6).fill().map(() => Array(5).fill(''));
-
-        // Generate Grid
-        for (let i = 0; i < 6; i++) {
-            const row = document.createElement('div');
-            row.className = 'row';
-            for (let j = 0; j < 5; j++) {
-                const tile = document.createElement('div');
-                tile.className = 'tile';
-                row.appendChild(tile);
+        // Load words from external JSON, fallback to minimal curated list
+        let words = [];
+        
+        async function initGame() {
+            try {
+                const response = await fetch('words.json');
+                if (response.ok) {
+                    words = await response.json();
+                    console.log('Loaded', words.length, 'words from words.json');
+                } else {
+                    throw new Error('words.json not available');
+                }
+            } catch (e) {
+                console.warn('Fallback to embedded word list');
+                // Minimal fallback list (core Turkish words)
+                words = [
+                    "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
+                    "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
+                    "MERCAN","YOSUN","KÖMÜR","DEMİR","BAKIR","ALTIN","GÜMÜŞ","ELMAS","YAKUT","İNCİ",
+                    "MERMER","ÇAMUR","ÇAKIL","YAPRAK","MEYVE","SEBZE","TAHIL","ZEYTİN","ÜZÜM","ELMA",
+                    "ARMUT","AYVA","ERİK","KİRAZ","VİŞNE","İNCİR","LİMON","ÇİLEK","CEVİZ","FINDIK",
+                    "BADEM","MISIR","BUĞDAY","ARPA","PİRİNÇ","NANE","REYHAN","KEKİK","HAVUÇ","ŞALGAM",
+                    "PANCAR","PATATES","SOĞAN","SARIMSAK","LAHANA","MARUL","BİBER","DOMATES","KABAK",
+                    "NOHUT","FASULYE","BEZELYE","BAKLA","MERCİMEK","BARBUNYA","BÖRÜLCE","KETEN","SUSAM",
+                    "PEYNİR","KAŞAR","YOĞURT","AYRAN","KAYMAK","FIRIN","ÇATAL","KAŞIK","BIÇAK","TABAK",
+                    "BARDAK","LİMONATA","GAZOZ","SALEP","BOZA","ÇORBA","EKMEK","SİMİT","POĞAÇA","BÖREK",
+                    "LAHMACUN","PİDE","DÖNER","KOKOREÇ","KÖFTE","PİLAV","BULGUR","KUSKUS","MAKARNA","ERİŞTE",
+                    "LAHANA","KARNIYARIK","İMAMBAYILDI","MUSAKKA","KÜNEFE","SÜTLAÇ","GÜLLAÇ","KAZANDİBİ","MUHALLEBİ","TAVUKGÖĞSÜ",
+                    "BAKLAVA","KADAYIF","LOKUM","HELVA","PEKMEZ","MARMELAT","REÇEL","ŞERBET","HOŞAF","KOMPOSTO",
+                    "DONDURMA","ÇİKOLATA","ŞEKER","KURABİYE","BİSKÜVİ","GOFRET","PASTA","KREM","PUDRA","ALLIK",
+                    "FONDÖTEN","RUJ","PARFÜM","DEODORANT","KREM","LOSİYON","MASKARA","EYELINER","PERMA","BOYA",
+                    "ŞAPKA","BERE","FÖTR","KASK","KASKET","EŞARP","ŞAL","ATKI","ELDİVEN","ÇORAP",
+                    "PANTOLON","ŞORT","ETEK","ELBİSE","GELİNLİK","DAMATLIK","SMOKİN","FRAK","CEKET","BLAZER",
+                    "KAZAK","TIŞÖRT","GÖMLEK","KRAVAT","PAPYON","FULAR","MENDİL","KEMER","SAAT","GÖZLÜK",
+                    "LENSE","AYAKKABI","BOT","ÇİZME","SANDAL","TERLİK","PALET","ŞNORKEL","KANO","KAYAK",
+                    "LEVREK","ÇİPURA","LÜFER","HAMSİ","PALAMUT","SAZAN","SOMON","KÖPEK","KEDİ","TAVUK",
+                    "HOROZ","ÖRDEK","KARTAL","ŞAHİN","ATMACA","SERÇE","KARGA","LEYLEK","GÜVERCİN","KUMRU",
+                    "ARI","KELEBEK","SİNEK","ÇEKİRGE","AKREP","ÖRÜMCEK","KENE","PİRE","BİT","ASLAN",
+                    "KAPLAN","PARS","ÇİTA","ZEBRA","ZÜRAFA","MAYMUN","GORİL","AYI","KURT","TİLKİ",
+                    "ÇAKAL","KUNDUZ","SİNCAP","KİRPI","TAVŞAN","YARASA","FARE","SIÇAN","HAMSTER","PENGUEN",
+                    "FLAMİNGO","PAPAGAN","KANARYA","SAHİL","PLAJ","BOĞAZ","KANAL","KÖRFEZ","OKYANUS","GÜNEY",
+                    "KUZEY","DOĞU","BATI","MERKEZ","HIZLI","YAVAŞ","UZUN","KISA","GENİŞ","DAR",
+                    "KALIN","İNCE","AĞIR","HAFİF","YUMUŞAK","SERT","TATLI","ACI","EKŞİ","TUZLU",
+                    "ISLAK","KURU","SICAK","SOĞUK","ILIK","SERİN","PARLAK","ESKİ","YENİ","GENÇ",
+                    "YAŞLI","BÜYÜK","KÜÇÜK","İÇERİ","DIŞARI","YUKARI","AŞAĞI","DOĞRU","YANLIŞ","GERÇEK",
+                    "YALAN","SAHTE","ASİL","SOYLU","YÜCE","KUTSAL","ŞANSLI","KÖTÜ","İYİ","GÜZEL",
+                    "ÇİRKİN","TATLI","SEVİM","NEŞELİ","HATIRA","ANILAR","GEÇMİŞ","GELECEK","GİDEN","GELEN",
+                    "AKAN","DURAN","KOŞAN","UÇAN","YÜRÜYEN","OTURAN","YATAN","KALKAN","İNEN","ÇIKAN",
+                    "GİREN","AÇAN","KAPAN","BAŞLAN","BİTEN","DEVAM","SÜREN","BÜYÜYEN","KÜÇÜLEN","ARTAN",
+                    "AZALAN","YÜKSELEN","GİZLİ","AŞİKAR","BELLİ","AÇIK","DOSTLUK","DÜŞMANLIK","NEFRET","KALABALIK",
+                    "TENHA","BOŞ","DOLU","TAMAM","EKSİK","FAZLA","ARTI","EKSİ","POZİTİF","NEGATİF",
+                    "ORTA","MERKEZİ","YEREL","GLOBAL","KÜRESEL","ULUSAL","MİLLİ","YERLİ","YABANCI","İÇSEL",
+                    "DIŞSAL","ÖZEL","GENEL","KAMU","HUSUSİ","ŞAHSİ","SOSYAL","KÜLTÜR","DOĞAL","YAPAY",
+                    "SUNİ","SANAL","DİJİTAL","ANALOG","MODERN","KLASİK","ANTİK","YENİLİK","DEVRİM","DEĞİŞİM",
+                    "DÖNÜŞÜM","EVİRİM","GELİŞİM","BÜYÜME","ÇOCUK","YETİŞKİN","İNSAN","KADIN","ERKEK","KIZ",
+                    "OĞLAN","BEBEK","YAŞLI","KARTAL","DENİZCİ","ZAMAN","MEKAN","UZAY","ROKET","GEZEGEN",
+                    "ASTEROİD","KUYRUK","METEOR","KOMETA","GALAKSİ","NEBULA","PULSAR","KUASAR","NOVA","SÜPERNOVA",
+                    "KARADELİK","YILDIZ","GÖKCİSİM","TELESKOP","MİKROSKOP","LABORATUVAR","DENEY","KİMYA","FİZİK","BİYOLOJİ",
+                    "MATEMATİK","TARİH","COĞRAFYA","FELSEFE","PSİKOLOJİ","SOSYOLOJİ","EKONOMİ","POLİTİKA","HUKUK","TIP",
+                    "MÜHENDİS","MİMAR","SANATÇI","YAZAR","ŞAİR","RESSAM","MÜZİSYEN","OYUNCU","SPORCU","ÖĞRETMEN",
+                    "DOKTOR","HEMŞİRE","AVUKAT","HAKİM","SAVCI","POLİS","ASKER","PİLOT","KAPTAN","DENİZCİ",
+                    "MARANGOZ","DEMİRCİ","ÇİFTÇİ","BERBER","KUAFÖR","AŞÇI","GARSON","BACI","HİZMETLİ","ŞOFÖR",
+                    "MUHASEBE","MEMUR","BANKACI","GAZETECİ","EDITÖR","YÖNETMEN","PRODÜKTÖR","TEKNİSYEN","OPERATÖR","PROGRAMCI",
+                    "TASARIMCI","REHBER","TERCÜMAN","DİPLOMAT","BÜROKRAT","VATANDAŞ","YABANCI","MÜLTECİ","GÖÇMEN","YOLCU",
+                    "TURİST","TACİR","ESNAF","PAZARCI","MANAV","KASAP","EKMEKÇİ","SÜTÇÜ","BALIKÇI","AVCI",
+                    "ÇOBAN","RENDA","İŞÇİ","AMELE","USTA","KALFA","ÇIRAK","PATRON","MÜDÜR","ŞEF",
+                    "BAŞKAN","VEKİL","ÜYE","ADAY","SEÇMEN","YARGIÇ","JÜRİ","TANIK","SANIK","MAHKUM",
+                    "MAĞDUR","KURBAN","ŞAHİT","DELİL","KANIT","BELGE","EVRAK","DOSYA","RAPOR","TUTANAK",
+                    "ZABIT","MEKTUP","POSTA","KARGO","TESLİMAT","PAKET","KOLİ","ZARF","ETİKET","BARKOD",
+                    "FATURA","FİŞ","SENED","ÇEK","TEMİNAT","KEFİL","BORÇ","ALACAK","FAİZ","KAR",
+                    "ZARAR","KÂR","GİDER","GELİR","BÜTÇE","VERGİ","HARAÇ","RESMİ","GAYRİRESMİ","RESMİ",
+                    "YASAL","YASADISI","MEŞRU","MEŞRULAŞTIRILMIŞ","MEŞRULAŞTIRILMAMIŞ","MEŞRULAŞTIRILAN","MEŞRULAŞTIRILAMAYAN","MEŞRULAŞTIRILACAK","MEŞRULAŞTIRILMAK","MEŞRULAŞTIRILDI"
+                ].filter(w => w.length === 5);
             }
-            grid.appendChild(row);
+            
+            // Now start the game
+            startGame();
         }
-
-        function showMessage(msg) {
-            const el = document.getElementById('message');
-            el.textContent = msg;
-            el.style.display = 'block';
-            setTimeout(() => el.style.display = 'none', 2000);
-        }
-
-        function updateGrid() {
-            const row = grid.children[currentRow];
-            for (let i = 0; i < 5; i++) {
-                row.children[i].textContent = guessRows[currentRow][i];
-                row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
+        
+        function startGame() {
+            const TARGET = words[Math.floor(Math.random() * words.length)];
+            let currentRow = 0;
+            let currentTile = 0;
+            const grid = document.getElementById('grid');
+            const guessRows = Array(6).fill().map(() => Array(5).fill(''));
+    
+            // Generate Grid
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let j = 0; j < 5; j++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    row.appendChild(tile);
+                }
+                grid.appendChild(row);
             }
-        }
-
-        function handleKey(key) {
-            if (key === 'Enter') {
-                submitGuess();
-            } else if (key === 'Backspace') {
-                if (currentTile > 0) {
-                    currentTile--;
-                    guessRows[currentRow][currentTile] = '';
+    
+            function showMessage(msg) {
+                const el = document.getElementById('message');
+                el.textContent = msg;
+                el.style.display = 'block';
+                setTimeout(() => el.style.display = 'none', 2000);
+            }
+    
+            function updateGrid() {
+                const row = grid.children[currentRow];
+                for (let i = 0; i < 5; i++) {
+                    row.children[i].textContent = guessRows[currentRow][i];
+                    row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
+                }
+            }
+    
+            function handleKey(key) {
+                if (key === 'Enter') {
+                    submitGuess();
+                } else if (key === 'Backspace') {
+                    if (currentTile > 0) {
+                        currentTile--;
+                        guessRows[currentRow][currentTile] = '';
+                        updateGrid();
+                    }
+                } else if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
+                    guessRows[currentRow][currentTile] = key.toLocaleUpperCase('tr');
+                    currentTile++;
                     updateGrid();
                 }
-            } else if (/^[a-zA-ZğüşıöçĞÜŞİÖÇ]$/.test(key) && currentTile < 5) {
-                guessRows[currentRow][currentTile] = key.toLocaleUpperCase('tr');
-                currentTile++;
-                updateGrid();
             }
-        }
-
-        function submitGuess() {
-            const guess = guessRows[currentRow].join('');
-            
-            if (guess.length !== 5) return showMessage("Eksik harf!");
-            if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
-
-            const targetArr = TARGET.split('');
-            const guessArr = guess.split('');
-            const states = Array(5).fill('absent');
-            const targetCounts = {};
-            targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
-
-            // First pass: Greens
-            guessArr.forEach((l, i) => {
-                if (l === targetArr[i]) {
-                    states[i] = 'correct';
-                    targetCounts[l]--;
-                }
-            });
-
-            // Second pass: Yellows
-            guessArr.forEach((l, i) => {
-                if (states[i] !== 'correct' && targetCounts[l] > 0) {
-                    states[i] = 'present';
-                    targetCounts[l]--;
-                }
-            });
-
-            // Animate and Color
-            guessArr.forEach((l, i) => {
-                const tile = grid.children[currentRow].children[i];
-                setTimeout(() => {
-                    tile.classList.add('flip');
-                    tile.setAttribute('data-state', states[i]);
-                    
-                    // Update keyboard
-                    const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
-                    if (key) {
-                        const current = key.getAttribute('data-state');
-                        if (states[i] === 'correct') key.setAttribute('data-state', 'correct');
-                        else if (states[i] === 'present' && current !== 'correct') key.setAttribute('data-state', 'present');
-                        else if (states[i] === 'absent' && current !== 'correct' && current !== 'present') key.setAttribute('data-state', 'absent');
+    
+            function submitGuess() {
+                const guess = guessRows[currentRow].join('');
+                
+                if (guess.length !== 5) return showMessage("Eksik harf!");
+                if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
+    
+                const targetArr = TARGET.split('');
+                const guessArr = guess.split('');
+                const states = Array(5).fill('absent');
+                const targetCounts = {};
+                targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
+    
+                // First pass: Greens
+                guessArr.forEach((l, i) => {
+                    if (l === targetArr[i]) {
+                        states[i] = 'correct';
+                        targetCounts[l]--;
                     }
-                }, i * 250);
+                });
+    
+                // Second pass: Yellows
+                guessArr.forEach((l, i) => {
+                    if (states[i] !== 'correct' && targetCounts[l] > 0) {
+                        states[i] = 'present';
+                        targetCounts[l]--;
+                    }
+                });
+    
+                // Animate and Color
+                guessArr.forEach((l, i) => {
+                    const tile = grid.children[currentRow].children[i];
+                    setTimeout(() => {
+                        tile.classList.add('flip');
+                        tile.setAttribute('data-state', states[i]);
+                        
+                        // Update keyboard
+                        const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
+                        if (key) {
+                            const current = key.getAttribute('data-state');
+                            if (states[i] === 'correct') key.setAttribute('data-state', 'correct');
+                            else if (states[i] === 'present' && current !== 'correct') key.setAttribute('data-state', 'present');
+                            else if (states[i] === 'absent' && current !== 'correct' && current !== 'present') key.setAttribute('data-state', 'absent');
+                        }
+                    }, i * 250);
+                });
+    
+                setTimeout(() => {
+                    if (guess === TARGET) {
+                        showMessage("🚀 MÜKEMMEL! 🚀");
+                        document.querySelector('.header h1').textContent = "GÖREV TAMAMLANDI";
+                        grid.style.pointerEvents = 'none';
+                    } else if (currentRow === 5) {
+                        showMessage(`Oyun bitti: ${TARGET}`);
+                        grid.style.pointerEvents = 'none';
+                    } else {
+                        currentRow++;
+                        currentTile = 0;
+                    }
+                }, 1500);
+            }
+    
+            document.getElementById('keyboard').addEventListener('click', e => {
+                if (e.target.classList.contains('key')) handleKey(e.target.dataset.key);
             });
-
-            setTimeout(() => {
-                if (guess === TARGET) {
-                    showMessage("🚀 MÜKEMMEL! 🚀");
-                    document.querySelector('.header h1').textContent = "GÖREV TAMAMLANDI";
-                    grid.style.pointerEvents = 'none';
-                } else if (currentRow === 5) {
-                    showMessage(`Oyun bitti: ${TARGET}`);
-                    grid.style.pointerEvents = 'none';
-                } else {
-                    currentRow++;
-                    currentTile = 0;
-                }
-            }, 1500);
+            document.addEventListener('keydown', e => handleKey(e.key));
         }
-
-        document.getElementById('keyboard').addEventListener('click', e => {
-            if (e.target.classList.contains('key')) handleKey(e.target.dataset.key);
-        });
-        document.addEventListener('keydown', e => handleKey(e.key));
+        
+        // Initialize on page load
+        initGame();
     </script>
 </body>
 </html>
