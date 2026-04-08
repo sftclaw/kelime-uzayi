@@ -200,30 +200,28 @@
     <div class="grid-container" id="grid"></div>
     
     <script>
-        // Global mutable state for restart
-        let gameState = {
-            words: [],
-            TARGET: '',
-            currentRow: 0,
-            currentTile: 0,
-            grid: null,
-            guessRows: null,
-            gameOver: false
-        };
+        // Global state variables (closure captured)
+        let words = [];
+        let TARGET = '';
+        let currentRow = 0;
+        let currentTile = 0;
+        let grid = null;
+        let guessRows = null;
+        let gameOver = false;
         
         // Load words from external JSON, fallback to embedded list
         async function initGame() {
             try {
                 const response = await fetch('words.json');
                 if (response.ok) {
-                    gameState.words = await response.json();
-                    console.log('Loaded', gameState.words.length, 'words from words.json');
+                    words = await response.json();
+                    console.log('Loaded', words.length, 'words from words.json');
                 } else {
                     throw new Error('words.json not available');
                 }
             } catch (e) {
                 console.warn('Using embedded word list');
-                gameState.words = [
+                words = [
                     "KAĞIT","TURŞU","KEMAN","BİLGİ","SEVGİ","DENİZ","GÜNEŞ","DÜNYA","ÇİÇEK","KİTAP",
                     "BALIK","KALEM","SOKAK","MAHALLE","ŞEHİR","İLÇE","KÖPRÜ","LİMAN","İSKELE","YUNUS",
                     "MERCAN","YOSUN","KÖMÜR","DEMİR","BAKIR","ALTIN","GÜMÜŞ","ELMAS","YAKUT","İNCİ",
@@ -246,17 +244,15 @@
         
         function startGame() {
             // Reset state
-            gameState.TARGET = gameState.words[Math.floor(Math.random() * gameState.words.length)];
-            gameState.currentRow = 0;
-            gameState.currentTile = 0;
-            gameState.gameOver = false;
+            TARGET = words[Math.floor(Math.random() * words.length)];
+            currentRow = 0;
+            currentTile = 0;
+            gameOver = false;
             
-            const grid = document.getElementById('grid');
+            grid = document.getElementById('grid');
             grid.innerHTML = '';
-            gameState.grid = grid;
             
-            const guessRows = Array(6).fill().map(() => Array(5).fill(''));
-            gameState.guessRows = guessRows;
+            guessRows = Array(6).fill().map(() => Array(5).fill(''));
             
             // Hide end screen
             document.getElementById('endscreen').classList.remove('active');
@@ -300,7 +296,7 @@
             const guess = guessRows[currentRow].join('');
             
             if (guess.length !== 5) return showMessage("Eksik harf!");
-            if (!gameState.words.includes(guess)) return showMessage("Bu kelime listede yok!");
+            if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
     
             const targetArr = TARGET.split('');
             const guessArr = guess.split('');
@@ -357,7 +353,7 @@
         }
         
         function showEndScreen(won) {
-            gameState.gameOver = true;
+            gameOver = true;
             const overlay = document.getElementById('endscreen');
             const title = document.getElementById('endscreen-title');
             const subtitle = document.getElementById('endscreen-subtitle');
@@ -378,7 +374,7 @@
             targetDisplay.textContent = TARGET;
             attemptsEl.textContent = currentRow + 1;
             
-            // Hide stats on loss (only show attempts on win if desired)
+            // Hide stats on loss
             if (!won) {
                 statsEl.style.display = 'none';
             } else {
@@ -390,7 +386,7 @@
         }
         
         function handleKey(key) {
-            if (gameState.gameOver) return;
+            if (gameOver) return;
             
             if (key === 'Enter') {
                 submitGuess();
