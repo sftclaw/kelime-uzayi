@@ -12,25 +12,25 @@
             --win-glow: #10b981; --lose-glow: #ef4444;
         }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { 
-            width: 100%; height: 100%; margin: 0; padding: 0; 
-            background: var(--bg); color: var(--text); 
+        html, body {
+            width: 100%; height: 100%; margin: 0; padding: 0;
+            background: var(--bg); color: var(--text);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             overflow: hidden; touch-action: none;
             display: flex; flex-direction: column;
         }
-        .header { 
-            text-align: center; padding: 12px 15px; width: 100%; 
+        .header {
+            text-align: center; padding: 12px 15px; width: 100%;
             border-bottom: 1px solid #1e293b; flex-shrink: 0;
         }
-        .header h1 { 
-            margin: 0; font-size: 1.5rem; 
-            background: linear-gradient(135deg, #38bdf8, #818cf8); 
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+        .header h1 {
+            margin: 0; font-size: 1.5rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             font-weight: 900; letter-spacing: 1px;
         }
         .header .subtitle { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
-        
+
         .grid-container {
             display: flex; flex-direction: column; gap: 6px; padding: 15px;
             flex: 1; justify-content: center; align-items: center;
@@ -39,7 +39,7 @@
         .row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; max-width: 330px; }
         .tile {
             border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem; font-weight: 800; text-transform: uppercase; 
+            font-size: 1.8rem; font-weight: 800; text-transform: uppercase;
             aspect-ratio: 1; max-height: 62px;
             transition: all 0.2s; border-radius: 8px; background: rgba(15, 23, 42, 0.6);
         }
@@ -49,16 +49,16 @@
         .tile[data-state="active"] { border-color: #94a3b8; transform: scale(1.02); }
         .tile.flip { animation: flip 0.5s ease-in-out; }
         @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(90deg); } 100% { transform: rotateX(0); } }
-        
+
         .keyboard {
-            display: flex; flex-direction: column; gap: 8px; padding: 10px 6px; 
+            display: flex; flex-direction: column; gap: 8px; padding: 10px 6px;
             width: 100%; max-width: 600px; margin: 0 auto;
             background: #0f172a; border-top: 1px solid #1e293b; flex-shrink: 0;
         }
         .key-row { display: flex; justify-content: center; gap: 5px; width: 100%; }
         .key {
-            background: var(--key-bg); color: white; border: none; 
-            padding: 14px 0; border-radius: 6px; cursor: pointer; 
+            background: var(--key-bg); color: white; border: none;
+            padding: 14px 0; border-radius: 6px; cursor: pointer;
             font-weight: 700; flex: 1; max-width: 42px; text-transform: uppercase;
             font-size: 0.9rem; transition: background 0.1s; user-select: none;
             min-height: 50px; display: flex; align-items: center; justify-content: center;
@@ -177,6 +177,9 @@
         <div class="subtitle">Galaktik Kelime Avı</div>
     </div>
 
+    <!-- Debug info (remove later) -->
+    <div id="debug-info" style="position:fixed;top:10px;left:10px;font-size:10px;color:#f59e0b;z-index:999;background:rgba(0,0,0,0.7);padding:5px 8px;border-radius:4px;">Loading...</div>
+
     <!-- End Screen Overlay -->
     <div class="endscreen-overlay" id="endscreen">
         <div class="endscreen-card">
@@ -198,7 +201,7 @@
 
     <div class="message" id="message"></div>
     <div class="grid-container" id="grid"></div>
-    
+
     <script>
         // Global state variables (closure captured)
         let words = [];
@@ -208,7 +211,7 @@
         let grid = null;
         let guessRows = null;
         let gameOver = false;
-        
+
         // Load words from external JSON, fallback to embedded list
         async function initGame() {
             try {
@@ -245,13 +248,26 @@
             }
             startGame();
         }
-        
+
         function startGame() {
+            // DEBUG: Show word count
+            const debugEl = document.getElementById('debug-info');
+            if (debugEl) {
+                debugEl.textContent = 'words: ' + (words ? words.length : 'null') + ' | TARGET_before: ' + (TARGET || 'n/a');
+            }
+            
+            if (!words || words.length === 0) {
+                console.error('ERROR: words array is empty! Using fallback.');
+                words = ["A","B","C","D","E"];
+            }
+            
             // Reset state
             TARGET = words[Math.floor(Math.random() * words.length)];
             currentRow = 0;
             currentTile = 0;
             gameOver = false;
+            
+            if (debugEl) debugEl.textContent += ' | TARGET_after: ' + TARGET;
             
             grid = document.getElementById('grid');
             grid.innerHTML = '';
@@ -268,6 +284,34 @@
             // Reset keyboard
             document.querySelectorAll('.key').forEach(k => k.removeAttribute('data-state'));
             
+            // DEBUG: Check grid element
+            if (debugEl) debugEl.textContent += ' | gridElement: ' + (grid ? 'ok' : 'NULL');
+            
+            // Generate Grid
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement('div');
+                row.className = 'row';
+                for (let j = 0; j < 5; j++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile';
+                    row.appendChild(tile);
+                }
+                grid.appendChild(row);
+            }
+            
+            if (debugEl) debugEl.textContent += ' | tiles: ' + grid.children.length;
+        }
+
+            // Hide end screen
+            document.getElementById('endscreen').classList.remove('active');
+
+            // Reset header
+            document.querySelector('.header h1').textContent = 'KELİME UZAYI';
+            document.querySelector('.header .subtitle').textContent = 'Galaktik Kelime Avı';
+
+            // Reset keyboard
+            document.querySelectorAll('.key').forEach(k => k.removeAttribute('data-state'));
+
             // Generate Grid
             for (let i = 0; i < 6; i++) {
                 const row = document.createElement('div');
@@ -280,14 +324,14 @@
                 grid.appendChild(row);
             }
         }
-        
+
         function showMessage(msg) {
             const el = document.getElementById('message');
             el.textContent = msg;
             el.style.display = 'block';
             setTimeout(() => el.style.display = 'none', 2000);
         }
-        
+
         function updateGrid() {
             const row = grid.children[currentRow];
             for (let i = 0; i < 5; i++) {
@@ -295,19 +339,19 @@
                 row.children[i].setAttribute('data-state', guessRows[currentRow][i] ? 'active' : '');
             }
         }
-        
+
         function submitGuess() {
             const guess = guessRows[currentRow].join('');
-            
+
             if (guess.length !== 5) return showMessage("Eksik harf!");
             if (!words.includes(guess)) return showMessage("Bu kelime listede yok!");
-    
+
             const targetArr = TARGET.split('');
             const guessArr = guess.split('');
             const states = Array(5).fill('absent');
             const targetCounts = {};
             targetArr.forEach(l => targetCounts[l] = (targetCounts[l] || 0) + 1);
-    
+
             // First pass: Greens
             guessArr.forEach((l, i) => {
                 if (l === targetArr[i]) {
@@ -315,7 +359,7 @@
                     targetCounts[l]--;
                 }
             });
-    
+
             // Second pass: Yellows
             guessArr.forEach((l, i) => {
                 if (states[i] !== 'correct' && targetCounts[l] > 0) {
@@ -323,14 +367,14 @@
                     targetCounts[l]--;
                 }
             });
-    
+
             // Animate and Color
             guessArr.forEach((l, i) => {
                 const tile = grid.children[currentRow].children[i];
                 setTimeout(() => {
                     tile.classList.add('flip');
                     tile.setAttribute('data-state', states[i]);
-                    
+
                     // Update keyboard
                     const key = document.querySelector(`.key[data-key="${l.toLowerCase()}"]`);
                     if (key) {
@@ -341,7 +385,7 @@
                     }
                 }, i * 250);
             });
-    
+
             setTimeout(() => {
                 if (guess === TARGET) {
                     // WIN - show end screen
@@ -355,7 +399,7 @@
                 }
             }, 1500);
         }
-        
+
         function showEndScreen(won) {
             gameOver = true;
             const overlay = document.getElementById('endscreen');
@@ -364,7 +408,7 @@
             const targetDisplay = document.getElementById('target-display');
             const attemptsEl = document.getElementById('attempts-count');
             const statsEl = document.getElementById('endscreen-stats');
-            
+
             if (won) {
                 title.textContent = 'GÖREV TAMAMLANDI';
                 title.className = 'endscreen-title win';
@@ -374,24 +418,24 @@
                 title.className = 'endscreen-title lose';
                 subtitle.textContent = 'Başka bir zaman tekrar dene!';
             }
-            
+
             targetDisplay.textContent = TARGET;
             attemptsEl.textContent = currentRow + 1;
-            
+
             // Hide stats on loss
             if (!won) {
                 statsEl.style.display = 'none';
             } else {
                 statsEl.style.display = 'flex';
             }
-            
+
             overlay.classList.add('active');
             grid.style.pointerEvents = 'none';
         }
-        
+
         function handleKey(key) {
             if (gameOver) return;
-            
+
             if (key === 'Enter') {
                 submitGuess();
             } else if (key === 'Backspace') {
@@ -406,17 +450,17 @@
                 updateGrid();
             }
         }
-        
+
         document.getElementById('keyboard').addEventListener('click', e => {
             if (e.target.classList.contains('key')) handleKey(e.target.dataset.key);
         });
         document.addEventListener('keydown', e => handleKey(e.key));
-        
+
         // Restart button
         document.getElementById('btn-restart').addEventListener('click', () => {
             startGame();
         });
-        
+
         // Initialize on page load
         initGame().catch(err => {
             console.error('initGame failed:', err);
